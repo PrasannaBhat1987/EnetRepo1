@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="prasanna-dashboard.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  
+</head>
+<body ng-app='enetDashboardApp'>
+	<div class="container-fluid">
+	  <div class="row header">
+	  	<div class="col-sm-4">
+		    <h1>My First Bootstrap Page</h1>
+		    <p>Resize this responsive page to see the effect!</p> 
+	    </div>
+	  </div>
+	  <div class="row">
+	  	<div class="col-sm-2 navigation" ng-controller="LogoutController">
+	  		<ul class="nav nav-pills nav-stacked">
+				<li ng-class="{active:isSelected(1)}"><a href="#" ng-click="selectTab(1)">Dashboard</a></li>
+				<li ng-class="{active:isSelected(2)}"><a href="#users" ng-click="selectTab(2)">Users</a></li>
+				<li ng-class="{active:isSelected(3)}"><a href="#" ng-click="selectTab(3)">Create RAO</a></li>
+				<li ng-class="{active:isSelected(4)}"><a href="#websites" ng-click="selectTab(4)">Websites</a></li>
+				<li ng-class="{active:isSelected(5)}"><a href="#customers" ng-click="selectTab(5)">Customers</a></li>
+				<li><a href="#" id="logout" ng-click="logout()">Logout</a></li>
+			</ul>
+	  	</div>
+	  	<div class="col-sm-10 details">
+	  		<div ng-view></div>
+	  	</div>
+	  </div>
+	</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28//angular-route.min.js"></script>
+	<script src="js/prasanna-dashboard.js"></script>
+	
+</body>
+</html>
