@@ -1,6 +1,65 @@
-	<h2>Show Users</h2>
+<h2>Users </h2>
+<ul class="nav nav-tabs">
+   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Add</a></li>
+   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2);showUsers()">Edit/Delete</a></li>
+</ul>
+<div ng-show="isSelected(1)">
+  	<hr>
+  	<h4>Add User</h4>
+  	<hr>
+  	{{message}}
+  	<form role="form">
+	  	<div class="form-group">
+			<label for="name">Name:</label> 
+			<input type="text" class="form-control" id="name" ng-model="name">
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label> 
+			<input type="text" class="form-control" id="email" ng-model="email">
+		</div>
+		<div class="form-group">
+			<label for="contact">Contact Number:</label> 
+			<input type="text" class="form-control" id="contact" ng-model="contact">
+		</div>
+		<div class="form-group">
+			<label for="address">Address:</label> 
+			<textarea class="form-control" rows="5" id="address" ng-model="address"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="role">Select Role:</label> 
+			<select class="form-control selectpicker" id="role" ng-model="role">
+			    <option>Admin</option>
+			    <option>Manager</option>
+			    <option>Representative</option>
+			 </select>
+		</div>
+		<div class="form-group">
+			<label for="manager">Manager ID:</label> 
+			<input type="text" class="form-control" id="manager" ng-model="manager">
+		</div>
+		<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="addUser()">Add User</button>
+	</form>	
+</div>
+
+
+<div ng-show="isSelected(2)">
+  	<hr>
+  	<h4>Edit/Show Users</h4>
+  	<hr>
+  	<table id="usersTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Role</th>
+                <th>Manager</th>
+            </tr>
+        </thead>
+    </table>
+    <button id="deleteuser" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteUser()">Delete Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editUser()">Edit Selected</button>
+</div>
+
  
-		{{ message }}
-		<ul>
-        <li ng-repeat="user in users">{{user.name}} , {{user.email}}</li>
-    </ul>

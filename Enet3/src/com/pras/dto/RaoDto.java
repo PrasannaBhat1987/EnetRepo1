@@ -1,5 +1,6 @@
 package com.pras.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class RaoDto {
@@ -7,10 +8,15 @@ public class RaoDto {
 	private long id;
 	private String description;
 	private List<LineItemDto> lineItems;
+	private String orderNumber;
 	private long websiteId;
 	private long customerId;
 	private long branchId;
 	private long userId;
+	private String deliveryAddress;
+	private Date orderDate;
+	private String status;
+	private float total;
 	
 	public long getId() {
 		return id;
@@ -53,6 +59,37 @@ public class RaoDto {
 	}
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+	
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public float getTotal() {
+		return total;
+	}
+	public void setTotal(float total) {
+		this.total = total;
 	}
 	
 }

@@ -15,14 +15,15 @@ import com.pras.util.HibernateUtil;
 public class WebsiteDaoImpl implements WebsiteDao {
 
 	@Override
-	public void addWebsite(Website website) {
+	public void addWebsite(WebsiteDto website) {
 		// TODO Auto-generated method stub
 		//Get Session
         Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
         //start transaction
         session.beginTransaction();
+        Website w = WebsiteDtoHelper.getEntityFromDto(website);
         //Save the Model object
-        session.save(website);
+        session.save(w);
         session.getTransaction().commit();
 	}
 
@@ -51,6 +52,18 @@ public class WebsiteDaoImpl implements WebsiteDao {
 			dtos.add(WebsiteDtoHelper.getDtoFromEntity(websites.get(i)));
 		}
 		return dtos;
+	}
+
+	@Override
+	public void editWebsite(long id, WebsiteDto website) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		session.beginTransaction();
+		Website w = (Website) session.get(Website.class, id);
+		w.setName(website.getName());
+		session.saveOrUpdate(w);
+		session.getTransaction().commit();
 	}
 
 }

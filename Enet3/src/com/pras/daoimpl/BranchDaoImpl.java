@@ -81,6 +81,7 @@ public class BranchDaoImpl implements BranchDao{
 			dto.setId(branches.get(i).getId());
 			dtos.add(dto);
 		}
+		session.close();
 		return dtos;
 	}
 
@@ -92,6 +93,7 @@ public class BranchDaoImpl implements BranchDao{
 		Branch b = (Branch) session.get(Branch.class, id);
 		BranchDto dto = BranchDtoHelper.getDtoFromEntity(b);
 		dto.setId(id);
+		session.close();
 		return dto;
 	}
 

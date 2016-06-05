@@ -36,7 +36,7 @@ $(document).ready(function(){
 							var d = new Date();
 						    d.setTime(d.getTime() + (1*24*60*60*1000));
 						    var expires = "expires="+ d.toUTCString();
-						    data = data.substring(data.indexOf(":")).trim();
+						    data = data.substring(data.indexOf(":") + 1).trim();
 						    document.cookie = "Auth=" + data + "; " + expires;
 							Redirect();
 						},

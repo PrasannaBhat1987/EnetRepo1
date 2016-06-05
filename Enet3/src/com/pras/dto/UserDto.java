@@ -2,6 +2,7 @@ package com.pras.dto;
 
 public class UserDto {
 
+	private long id;
 	private String name;
 	private String password;
 	private String email;
@@ -64,6 +65,14 @@ public class UserDto {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

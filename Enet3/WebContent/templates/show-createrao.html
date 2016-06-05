@@ -1,0 +1,299 @@
+<h2>Create a RAO</h2>
+
+<form role="form">
+
+<div class="col-sm-12" ng-init="tab=1">
+	  <ul class="nav nav-tabs nav-justified">
+	    <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Customer</a></li>
+	    <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2)">Branch</a></li>
+	    <li ng-class="{active: isSelected(3)}"><a href ng-click="selectTab(3)">Commondity</a></li>
+	    <li ng-class="{active: isSelected(4)}"><a href ng-click="selectTab(4)">Representative</a></li>
+	    <li ng-class="{active: isSelected(5)}"><a href ng-click="selectTab(5)">Order</a></li>
+	    <li ng-class="{active: isSelected(6)}"><a href ng-click="selectTab(6);getWebsiteName()">Confirm</a></li>
+	  </ul>
+	  <div ng-show="isSelected(1)">
+	    <hr>
+	  	<h4>Customer Details</h4>
+	  	<hr>
+	  	<div class="form-group">
+			<label for="customerid">Customer ID:</label> 
+			<input type="text" class="form-control" id="customerid" ng-model="customerid">
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary center-block" ng-click="fetchCustomer()">Fetch Customer</button>
+		</div>
+		<div class="form-group custominfo">
+			<label for="customername">Customer Name:</label> 
+			<input type="text" class="form-control" id="customername" ng-model="customername" disabled>
+		</div>
+	  	<div class="form-group custominfo">
+			<label for="customeremail">Customer Email:</label> 
+			<input type="text" class="form-control" id="customeremail" ng-model="customeremail" disabled>
+		</div>
+		<div class="form-group custominfo">
+			<label for="customernumber">Customer Mobile Number:</label> 
+			<input type="text" class="form-control" id="customernumber" ng-model="customernumber" disabled>
+		</div>
+		<div class="form-group custominfo">
+			<label for="customeraddress">Customer Address:</label>
+			<textarea class="form-control" rows="5" id="customeraddress" ng-model="customeraddress" disabled></textarea>
+		</div>
+		<div class="form-group">
+			<label>Shipping address same as customer Address ? <input type="checkbox" value="" ng-model="sameaddress" ng-change="copyAddress()"></label>
+		</div>
+		<div class="form-group" id="shipping" hidden>
+			<label for="shippingaddress">Shipping Address:</label>
+			<textarea class="form-control" rows="5" id="customeraddress" ng-model="shippingaddress"></textarea>
+		</div>
+	  </div>
+	  <div ng-show="isSelected(2)">
+	    <hr>
+	  	<h4>Branch Details</h4>
+	  	<hr>
+	  	<div class="form-group">
+			<label for="branchDetails">Branch Details:</label>
+			<select class="form-control" ng-model="branchId" data-ng-options="a.id as a.place for a in branches">
+			</select>
+		</div>
+	  </div>
+	  <div ng-show="isSelected(3)">
+	    <hr>
+	  	<h4>Commondity Details</h4>
+	    <hr>
+	    <table id="cart" class="table table-hover table-condensed">
+    				<thead>
+						<tr>
+							<th style="width:50%">Product</th>
+							<th style="width:10%">Unit Price</th>
+							<th style="width:8%">Quantity</th>
+							<th style="width:22%" class="text-center">Subtotal</th>
+							<th style="width:10%"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="lineItem in lineItems">
+							<td data-th="Product">
+								<div class="row">
+									<div class="col-sm-10">
+										<h4 class="nomargin">{{lineItem.item}}</h4>
+										<p>{{lineItem.itemDescription}}</p>
+									</div>
+								</div>
+							</td>
+							<td data-th="Price">{{lineItem.unitPrice | currency:'&#8377;'}}</td>
+							<td data-th="Quantity">
+								<input type="number" class="form-control text-center" value="{{lineItem.quantity}}" disabled>
+							</td>
+							<td data-th="Subtotal" class="text-center">{{lineItem.unitPrice * lineItem.quantity | currency:'&#8377;'}}</td>
+							<td class="actions" data-th="">
+								<button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>
+								<button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>								
+							</td>
+						</tr>
+						<tr ng-show="showme">
+							<td data-th="Product">
+								<div class="row">
+									<div class="col-sm-10">
+									    <h4 class="nomargin"><input type="text" class="form-control" id="item" ng-model="item"></h4>
+										<p><input type="text" class="form-control" id="itemName" ng-model="itemDescription"></p>
+									</div>
+								</div>
+							</td>
+							<td data-th="Price"><input type="text" class="form-control" id="itemPrice" ng-model="unitPrice"></td>
+							<td data-th="Quantity">
+								<input type="number" class="form-control text-center" id="itemQty" value = '0' ng-model="quantity">
+							</td>
+							<td data-th="Subtotal" class="text-center">{{unitPrice * quantity | currency:'&#8377;'}}</td>
+							<td class="actions" data-th="">
+								<button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>
+								<button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>								
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr class="visible-xs">
+							<td class="text-center"><strong>Total 1.99</strong></td>
+						</tr>
+						<tr>
+							<td><button type="button" class="btn btn-primary" ng-click="showme=true">Add LineItem</button></td>
+							<td colspan="2" class="hidden-xs"></td>
+							<td class="hidden-xs text-center"><strong>Total {{getTotal() | currency:'&#8377;'}}</strong></td>
+							<td><button type="button" class="btn btn-primary" ng-click="saveLineItem()">Save </button></td>
+						</tr>
+					</tfoot>
+				</table>
+	    
+	    
+	    
+	  </div>
+	  <div ng-show="isSelected(4)">
+	    <hr>
+	  	<h4>Representative Details</h4>
+	  	<hr>
+	  	<div class="form-group">
+			<label for="representativeid">Representative ID:</label> 
+			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid">
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary center-block" ng-click="fetchRepresentative()">Fetch Representative</button>
+		</div>
+	  	<div class="form-group repdetails">
+			<label for="representativename">Representative Name:</label> 
+			<input	type="text" class="form-control" id="representativename" ng-model="representativename" disabled>
+		</div>
+		<div class="form-group repdetails">
+			<label for="representativeemail">Representative Email:</label> 
+			<input	type="text" class="form-control" id="representativeemail" ng-model="representativeemail" disabled>
+		</div>
+		<div class="form-group repdetails">
+			<label for="representativecontact">Representative Contact:</label> 
+			<input	type="text" class="form-control" id="representativecontact" ng-model="representativecontact" disabled>
+		</div>
+	  </div>
+	  <div ng-show="isSelected(5)">
+	    <hr>
+	  	<h4>Order Details</h4>
+	  	<hr>
+		<div class="form-group">
+			<label for="bookedWebsite">Booked website:</label>
+			<select class="form-control" ng-model="websiteId" data-ng-options="a.id as a.name for a in websites">
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="orderNumber">Order Number:</label> 
+			<input type="text" class="form-control" id="orderNumber" ng-model="orderNumber">
+		</div>
+		<div class="form-group">
+			<label for="description">Additional Information (If Any):</label>
+			<textarea class="form-control" rows="5" id="description" ng-model="description"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao()">Create RAO</button>
+	  </div>
+	  <div ng-show="isSelected(6)">
+	  	<hr>
+	  	<div class="row cust">
+		  	<div class="col-sm-5">
+		  	  <div class="form-group">
+				<h3>Order Information:</h3> 
+				<div class="table-responsive">
+				  <table class="table">
+				  	<thead>
+				  		<tr>
+				  			<th class="col-sm-1"></th>
+				  			<th class="col-sm-4"></th>
+				  		</tr>
+				  	</thead>
+				    <tr><td>Date:</td><td>{{orderDate | date:'dd-MM-yyyy'}}</td></tr>
+				    <tr><td>Website:</td><td>{{websiteName}}</td></tr>
+				    <tr><td>Order#:</td><td>{{orderNumber}}</td></tr>
+				  </table>
+				</div>
+		      </div>
+		  	</div>
+		  	<div class="col-sm-4 col-sm-offset-3">
+		  	  <div class="form-group">
+				<h3>Representative Information:</h3> 
+				<div class="table-responsive">
+				  <table class="table">
+				  <thead>
+				  		<tr>
+				  			<th class="col-sm-1"></th>
+				  			<th class="col-sm-2"></th>
+				  		</tr>
+				  	</thead>
+				   <tr><td>ID:</td><td>{{representativeid}}</td></tr>
+				    <tr><td>Name:</td><td>{{representativename}}</td></tr>
+				    <tr><td>Email:</td><td>{{representativeemail}}</td></tr>
+				    <tr><td>Contact:</td><td>{{representativecontact}}</td></tr>
+				  </table>
+				</div>
+			  </div>
+		  	</div>
+	  	</div>
+	  	<div class="row cust">
+	  		<h3 class="text-center">Products Information:</h3> 
+		  	<div class="col-sm-10 col-sm-offset-1">
+	            <table class="table">
+	                <thead>
+	                    <tr>
+	                        <th class="text-center">Product</th>
+	                        <th class="text-right hidden-xs" >Price</th>
+	                        <th class="hidden-xs">Quantity</th>
+	                        <th class="text-right">Total</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr ng-repeat="lineItem in lineItems">
+								<td data-th="Product" class="col-sm-7 text-center">
+									<div class="row">
+										<div>
+											<h4 class="nomargin">{{lineItem.item}}</h4>
+											<p>{{lineItem.itemDescription}}</p>
+										</div>
+									</div>
+								</td>
+								<td data-th="Price" class="hidden-xs text-right">{{lineItem.unitPrice | currency:'&#8377;'}}</td>
+								<td data-th="Quantity" class="hidden-xs">
+									<input type="number" class="form-control text-center" value="{{lineItem.quantity}}" disabled>
+								</td>
+								<td data-th="Subtotal" class="text-right">{{lineItem.unitPrice * lineItem.quantity | currency:'&#8377;'}}</td>
+						</tr>
+	                    <tr>
+	                        <td class="text-center"><h5>Subtotal</h5></td>
+	                        <td></td>
+	                        <td></td>
+	                        <td class="text-right"><h5><strong>{{getTotal() | currency:'&#8377;'}}</strong></h5></td>
+	                    </tr>
+	                    <tr>
+	                        <td class="text-center"><h5>ENET Service charge</h5></td>
+	                        <td></td>
+	                        <td></td>
+	                        <td class="text-right"><h5><strong>{{serviceCharge | currency:'&#8377;'}}</strong></h5></td>
+	                    </tr>
+	                    <tr>
+	                        <td class="text-center"><h3>Total</h3></td>
+	                        <td></td>
+	                        <td></td>
+	                        <td class="text-right"><h3><strong>{{getGrandTotal() | currency:'&#8377;'}}</strong></h3></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	  	</div>
+	  	<div class="row cust">
+		  	<div class="col-sm-5">
+		  	  <div class="form-group">
+		  	  	<div class="test"><h3>Customer Information:</h3></div>
+				 
+				<div class="table-responsive">
+				  <table class="table">
+				  	<thead>
+				  		<tr>
+				  			<th class="col-sm-1"></th>
+				  			<th class="col-sm-4"></th>
+				  		</tr>
+				  	</thead>
+				    <tr><td>ID:</td><td>{{customerid}}</td></tr>
+				    <tr><td>Name:</td><td>{{customername}}</td></tr>
+				    <tr><td>Email:</td><td>{{customeremail}}</td></tr>
+				    <tr><td>Contact:</td><td>{{customernumber}}</td></tr>
+				    <tr><td>Address:</td><td>{{customeraddress}}</td></tr>
+				  </table>
+				</div>
+		      </div>
+		  	</div>
+		  	<div class="col-sm-4 col-sm-offset-3">
+		  	  <div class="form-group">
+				<h3>Shipping Information:</h3> 
+				<p>{{shippingaddress}}</p>
+		      </div>
+		  	</div>
+		 </div>
+	  	
+	  </div>
+</div>
+
+</form>
+
+{{raoId}}
+</ul>

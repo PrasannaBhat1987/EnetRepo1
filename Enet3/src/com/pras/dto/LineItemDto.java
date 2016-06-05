@@ -3,9 +3,10 @@ package com.pras.dto;
 public class LineItemDto {
 
 	private long id;
+	private String item;
 	private String itemDescription;
 	private int quantity;
-	private double price;
+	private String unitPrice;
 	private long raoId;
 	
 	public long getId() {
@@ -26,17 +27,24 @@ public class LineItemDto {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public double getPrice() {
-		return price;
-	}
-	public void setPrice(double price) {
-		this.price = price;
-	}
+	
 	public long getRaoId() {
 		return raoId;
 	}
 	public void setRaoId(long raoId) {
 		this.raoId = raoId;
+	}
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+	public String getItem() {
+		return item;
+	}
+	public void setItem(String item) {
+		this.item = item;
 	}
 	
 }

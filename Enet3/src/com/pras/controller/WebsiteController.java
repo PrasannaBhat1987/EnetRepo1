@@ -7,6 +7,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,7 +28,7 @@ public class WebsiteController {
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response add(@HeaderParam("Auth") String auth,
-			Website website) {
+			WebsiteDto website) {
 
 		System.out.println("Received Website is :" + website.getName());
 		if (isValid(auth)) {
@@ -43,8 +44,7 @@ public class WebsiteController {
 	}
 	
 	@DELETE
-	@Path("{id}/delete")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
 	public Response delete(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
 
 		if (isValid(auth)) {
@@ -59,6 +59,21 @@ public class WebsiteController {
 
 	}
 
+	@PUT
+	@Path("{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response edit(@HeaderParam("Auth") String auth, @PathParam("id") long id, WebsiteDto website) {
+		if (isValid(auth)) {
+			WebsiteDao dao = new WebsiteDaoImpl();
+			dao.editWebsite(id, website);
+			return Response.status(200)
+					.entity("This website is added successfully").build();
+		} else {
+			return Response.status(400).entity("You are not authorized")
+					.build();
+		}
+		
+	}
 	
 	@GET
 	@Path("/all")

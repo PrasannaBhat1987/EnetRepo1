@@ -32,6 +32,17 @@ public class Branch implements Serializable {
 	@OneToMany(mappedBy="branch")
 	private List<Rao> raos;
 	
+	@OneToMany(mappedBy="branch")
+	private List<User> branchEmployees;
+	
+	public List<User> getBranchEmployees() {
+		return branchEmployees;
+	}
+
+	public void setBranchEmployees(List<User> branchEmployees) {
+		this.branchEmployees = branchEmployees;
+	}
+
 	public long getId() {
 		return id;
 	}

@@ -32,19 +32,24 @@ public class User implements Serializable{
 	private String contact;
 	private String address;
 	private String role;
+	private long managerId;
+	
+	@ManyToOne
+	@JoinColumn(name="branch_id")
+	private Branch branch;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="branchmanager")
 	private List<Branch> branches;
 
-	@JsonBackReference
-	@ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name="manager_id")
-	private User manager;
+//	@JsonBackReference
+//	@ManyToOne(cascade={CascadeType.ALL})
+//    @JoinColumn(name="manager_id")
+//	private User manager;
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy="manager")
-	private List<User> subordinates;
+//	@JsonManagedReference
+//	@OneToMany(mappedBy="manager")
+//	private List<User> subordinates;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
@@ -114,21 +119,21 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public User getManager() {
-		return manager;
-	}
-
-	public void setManager(User manager) {
-		this.manager = manager;
-	}
-
-	public List<User> getSubordinates() {
-		return subordinates;
-	}
-
-	public void setSubordinates(List<User> subordinates) {
-		this.subordinates = subordinates;
-	}
+//	public User getManager() {
+//		return manager;
+//	}
+//
+//	public void setManager(User manager) {
+//		this.manager = manager;
+//	}
+//
+//	public List<User> getSubordinates() {
+//		return subordinates;
+//	}
+//
+//	public void setSubordinates(List<User> subordinates) {
+//		this.subordinates = subordinates;
+//	}
 
 	public String getRole() {
 		return role;
@@ -136,6 +141,22 @@ public class User implements Serializable{
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public long getManagerId() {
+		return managerId;
+	}
+
+	public void setManagerId(long managerId) {
+		this.managerId = managerId;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
 
 }

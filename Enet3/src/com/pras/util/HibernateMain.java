@@ -44,7 +44,7 @@ public class HibernateMain {
 		user2.setContact("prabhatContact");
 		user2.setEmail("prabhatEmail");
 		user2.setPassword("prabhat");
-		user2.setManager(user1);
+		user2.setManagerId(user1.getId());
 		session.save(user2);
 		
 		User user3 = new User();
@@ -53,7 +53,7 @@ public class HibernateMain {
 		user3.setContact("naveenContact");
 		user3.setEmail("naveenEmail");
 		user3.setPassword("naveen");
-		user3.setManager(user1);
+		user3.setManagerId(user1.getId());
 		session.save(user3);
 		
 		

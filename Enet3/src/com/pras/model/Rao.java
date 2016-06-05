@@ -1,6 +1,7 @@
 package com.pras.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -41,6 +42,16 @@ public class Rao implements Serializable{
 	@ManyToOne
     @JoinColumn(name="user_id")
 	private User user;
+	
+	private String orderNumber;
+	
+	private String deliveryAddress;
+	
+	private Date orderDate;
+	
+	private String status;
+	
+	private float total;
 
 	public long getId() {
 		return id;
@@ -96,6 +107,46 @@ public class Rao implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
 	}
 	
 }

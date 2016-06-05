@@ -17,7 +17,7 @@ public class BranchDtoHelper {
 	public static BranchDto getDtoFromEntity(Branch b) {
 		BranchDto dto = new BranchDto();
 		dto.setAddress(b.getAddress());
-		dto.setContact(b.getAddress());
+		dto.setContact(b.getContact());
 		dto.setPincode(b.getPincode());
 		dto.setPlace(b.getPlace());
 		if(b.getBranchmanager() != null) {

@@ -50,8 +50,7 @@ public class CustomerController {
 	}
 	
 	@DELETE
-	@Path("{id}/delete")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
 	public Response delete(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
 
 		if (isValid(auth)) {
@@ -67,7 +66,7 @@ public class CustomerController {
 	}
 	
 	@PUT
-	@Path("{id}/update")
+	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@HeaderParam("Auth") String auth, @PathParam("id") long id,
 			CustomerDto cust) {

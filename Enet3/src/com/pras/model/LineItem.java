@@ -18,9 +18,10 @@ public class LineItem implements Serializable{
 	@Id
 	@GeneratedValue
 	private long id;
+	private String item;
 	private String itemDescription;
 	private int quantity;
-	private double price;
+	private String unitPrice;
 	
 	@ManyToOne
     @JoinColumn(name="rao_id")
@@ -58,12 +59,22 @@ public class LineItem implements Serializable{
 		this.quantity = quantity;
 	}
 
-	public double getPrice() {
-		return price;
+	public String getUnitPrice() {
+		return unitPrice;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
 	}
+
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
+	}
+
+	
 
 }

@@ -22,10 +22,11 @@ public class UserDaoImpl implements UserDao {
 		// start transaction
 		session.beginTransaction();
 		User u = UserDtoHelper.getEntityFromDto(user);
-		u.setManager((User) session.get(User.class, user.getManagerId()));
+		//u.setManager((User) session.get(User.class, user.getManagerId()));
 		// Save the Model object
 		session.save(u);
 		session.getTransaction().commit();
+		session.close();
 	}
 
 
@@ -43,14 +44,15 @@ public class UserDaoImpl implements UserDao {
 		u.setBranches(user.getBranches());
 		u.setContact(user.getContact());
 		u.setEmail(user.getEmail());
-		u.setManager(user.getManager());
+		u.setManagerId(user.getManagerId());
 		u.setName(user.getName());
 		u.setPassword(user.getPassword());
 		u.setRaos(user.getRaos());
-		u.setSubordinates(user.getSubordinates());
+		//u.setSubordinates(user.getSubordinates());
 		u.setRole(user.getRole());
 		session.update(u);
 		session.getTransaction().commit();
+		session.close();
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class UserDaoImpl implements UserDao {
 		User user = (User) session.get(User.class, id);
 		
 		UserDto dto = UserDtoHelper.getDtoFromEntity(user);
-
+		session.close();
 		return dto;
 	}
 
@@ -78,6 +80,7 @@ public class UserDaoImpl implements UserDao {
 		for(int i=0;i<users.size();i++) {
 			dtos.add(UserDtoHelper.getDtoFromEntity(users.get(i)));
 		}
+		session.close();
 		return dtos;
 	}
 
@@ -89,6 +92,8 @@ public class UserDaoImpl implements UserDao {
 		session.beginTransaction();
 		User user = (User) session.get(User.class, id);
 		session.delete(user);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 }

@@ -23,48 +23,21 @@ import com.pras.util.HibernateUtil;
 public class RaoDaoImpl implements RaoDao{
 
 	@Override
-	public void addRao(RaoDto dto) {
-		// TODO Auto-generated method stub
-		//Get Session
-        Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
-        //start transaction
-        session.beginTransaction();
-        Rao rao = new Rao();
-        rao.setBranch((Branch) session.get(Branch.class, dto.getBranchId()));
-        rao.setCustomer((Customer) session.get(Customer.class, dto.getCustomerId()));
-        rao.setDescription(dto.getDescription());
-        rao.setUser((User) session.get(User.class, dto.getUserId()));
-        rao.setWebsite((Website) session.get(Website.class, dto.getWebsiteId()));
-        List<LineItemDto> items = dto.getLineItems();
-        List<LineItem> it = new ArrayList<>();
-        for(int i=0;i<items.size();i++) {
-        	it.add(LineItemDtoHelper.getEntityFromDto(items.get(i)));
-        }
-        rao.setItems(it);
-        //Save the Model object
-        session.save(rao);
-        session.getTransaction().commit();
-        session.close();
-	}
-
-	@Override
 	public void removeRao(long id) {
 		// TODO Auto-generated method stub
 		//Get Session
-        Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
+        Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
         Rao rao = (Rao) session.get(Rao.class, id);
         //Save the Model object
         session.delete(rao);
-        session.getTransaction().commit();
-        session.close();
 	}
 
 	@Override
 	public void editRao(long id, RaoDto dto) {
 		// TODO Auto-generated method stub
-		Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
+		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
         //Save the Model object
@@ -77,12 +50,11 @@ public class RaoDaoImpl implements RaoDao{
         
         session.saveOrUpdate(rao);
         session.getTransaction().commit();
-        session.close();
 	}
 
 	@Override
 	public List<RaoDto> getAll() {
-		Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
+		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
         List<Rao> raos = session.createCriteria(Rao.class).list();
@@ -92,16 +64,44 @@ public class RaoDaoImpl implements RaoDao{
 			dto = RaoDtoHelper.getDtoFromEntity(raos.get(i));
 			dtos.add(dto);
 		}
+		session.close();
 		return dtos;
 	}
 
 	@Override
 	public RaoDto getRao(long id) {
-		Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
+		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
         Rao dao = (Rao) session.get(Rao.class, id);
+        session.close();
         return RaoDtoHelper.getDtoFromEntity(dao);
 	}
 
+	@Override
+	public void addRao(RaoDto dto) {
+		// TODO Auto-generated method stub
+		//Get Session
+        Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
+        //start transaction
+        session.beginTransaction();
+        Rao rao = RaoDtoHelper.getEntityFromDto(dto);
+        rao.setBranch((Branch) session.get(Branch.class, dto.getBranchId()));
+        rao.setCustomer((Customer) session.get(Customer.class, dto.getCustomerId()));
+        rao.setDescription(dto.getDescription());
+        rao.setUser((User) session.get(User.class, dto.getUserId()));
+        rao.setWebsite((Website) session.get(Website.class, dto.getWebsiteId()));
+        List<LineItemDto> items = dto.getLineItems();
+        List<LineItem> it = new ArrayList<>();
+        LineItem lt = null;
+        for(int i=0;i<items.size();i++) {
+        	lt=LineItemDtoHelper.getEntityFromDto(items.get(i));
+        	session.save(lt);
+        	lt.setRao(rao);
+        	it.add(lt);
+        }
+        rao.setItems(it);
+        session.persist(rao);
+        session.getTransaction().commit();
+	}
 }

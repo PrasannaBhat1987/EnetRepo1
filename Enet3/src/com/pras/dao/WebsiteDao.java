@@ -7,8 +7,9 @@ import com.pras.model.Website;
 
 public interface WebsiteDao {
 
-	public void addWebsite(Website website);
+	public void addWebsite(WebsiteDto website);
 	public void removeWebsite(long id);
 	public List<WebsiteDto> getWebsites();
+	public void editWebsite(long id, WebsiteDto website);
 	
 }

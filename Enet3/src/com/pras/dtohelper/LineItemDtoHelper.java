@@ -10,8 +10,9 @@ public class LineItemDtoHelper {
 	public static LineItem getEntityFromDto(LineItemDto dto) {
 		LineItem li = new LineItem();
 		li.setId(dto.getId());
+		li.setItem(dto.getItem());
 		li.setItemDescription(dto.getItemDescription());
-		li.setPrice(dto.getPrice());
+		li.setUnitPrice(dto.getUnitPrice());
 		li.setQuantity(dto.getQuantity());
 		return li;
 	}
@@ -19,8 +20,9 @@ public class LineItemDtoHelper {
 	public static LineItemDto getDtoFromEntity(LineItem li) {
 		LineItemDto dto = new LineItemDto();
 		dto.setId(li.getId());
+		dto.setItem(li.getItem());
 		dto.setItemDescription(li.getItemDescription());
-		dto.setPrice(li.getPrice());
+		dto.setUnitPrice(li.getUnitPrice());
 		dto.setQuantity(li.getQuantity());
 		if(li.getRao() != null) {
 			dto.setRaoId(li.getRao().getId());

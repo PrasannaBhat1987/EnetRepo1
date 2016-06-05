@@ -50,8 +50,7 @@ public class UserController {
 	}
 	
 	@DELETE
-	@Path("/{id}/delete")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/{id}")
 	public Response delete(@HeaderParam("Auth") String auth,
 			@PathParam("id") long id) {
 

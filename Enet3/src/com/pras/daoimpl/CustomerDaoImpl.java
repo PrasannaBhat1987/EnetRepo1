@@ -34,7 +34,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	public void removeCustomer(long id) {
 		// TODO Auto-generated method stub
 		//Get Session
-        Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
+        Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
         //Save the Model object
@@ -47,7 +47,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public void editCustomer(long id, CustomerDto customer) {
 		// TODO Auto-generated method stub
-		Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
+		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
         Customer c = (Customer) session.get(Customer.class, id);
@@ -73,6 +73,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			dto.setId(custs.get(i).getId());
 			dtos.add(dto);
 		}
+		session.close();
 		return dtos;
 	}
 
@@ -84,6 +85,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		Customer c = new Customer();
 		c= (Customer) session.get(Customer.class, id);
 		CustomerDto dto = CustomerDtoHelper.getDtoFromEntity(c);
+		session.close();
 		return dto;
 	}
 
