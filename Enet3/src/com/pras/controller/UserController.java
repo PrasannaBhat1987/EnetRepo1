@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.pras.counts.UserCount;
 import com.pras.dao.UserDao;
 import com.pras.daoimpl.UserDaoImpl;
 import com.pras.dto.UserDto;
@@ -117,6 +118,22 @@ public class UserController {
 			return Response.status(200).entity(list).build();
 		}
 		
+		return Response.status(400).entity("You are not authorized")
+				.build();
+	}
+	
+	@GET
+	@Path("/getNumbers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getNumbers(@HeaderParam("Auth") String auth) {
+		if (isValid(auth)) {
+			UserDao dao = new UserDaoImpl();
+			UserCount ct = new UserCount();
+			ct.setAdmins(dao.getUserType("Admin"));
+			ct.setManagers(dao.getUserType("Manager"));
+			ct.setReps(dao.getUserType("Representative"));
+			return Response.status(200).entity(ct).build();
+		}
 		return Response.status(400).entity("You are not authorized")
 				.build();
 	}

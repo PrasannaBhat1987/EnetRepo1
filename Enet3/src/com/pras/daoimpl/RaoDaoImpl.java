@@ -3,7 +3,9 @@ package com.pras.daoimpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.pras.dao.RaoDao;
 import com.pras.dto.BranchDto;
@@ -79,7 +81,7 @@ public class RaoDaoImpl implements RaoDao{
 	}
 
 	@Override
-	public void addRao(RaoDto dto) {
+	public int addRao(RaoDto dto) {
 		// TODO Auto-generated method stub
 		//Get Session
         Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
@@ -103,5 +105,17 @@ public class RaoDaoImpl implements RaoDao{
         rao.setItems(it);
         session.persist(rao);
         session.getTransaction().commit();
+        return (int) rao.getId();
+	}
+
+	@Override
+	public int getRaoType(String status) {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		Criteria cr = session.createCriteria(Rao.class);
+		cr.add(Restrictions.eq("status", status));
+		List results = cr.list();
+		session.close();
+		return results.size();
 	}
 }

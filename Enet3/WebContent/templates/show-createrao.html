@@ -22,6 +22,9 @@
 		<div class="form-group">
 			<button class="btn btn-primary center-block" ng-click="fetchCustomer()">Fetch Customer</button>
 		</div>
+		<div class="form-group">
+			<button class="btn btn-primary center-block" ng-click="clearFields()">Clear All Fields</button>
+		</div>
 		<div class="form-group custominfo">
 			<label for="customername">Customer Name:</label> 
 			<input type="text" class="form-control" id="customername" ng-model="customername" disabled>
@@ -164,7 +167,7 @@
 			<label for="description">Additional Information (If Any):</label>
 			<textarea class="form-control" rows="5" id="description" ng-model="description"></textarea>
 		</div>
-		<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao()">Create RAO</button>
+		<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="selectTab(6)">Create RAO</button>
 	  </div>
 	  <div ng-show="isSelected(6)">
 	  	<hr>
@@ -182,7 +185,8 @@
 				  	</thead>
 				    <tr><td>Date:</td><td>{{orderDate | date:'dd-MM-yyyy'}}</td></tr>
 				    <tr><td>Website:</td><td>{{websiteName}}</td></tr>
-				    <tr><td>Order#:</td><td>{{orderNumber}}</td></tr>
+				    <tr><td>Order #:</td><td>{{orderNumber}}</td></tr>
+				    <tr id="raoid"><td>RAO #:</td><td>{{raoid}}</td></tr>
 				  </table>
 				</div>
 		      </div>
@@ -285,6 +289,9 @@
 				<p>{{shippingaddress}}</p>
 		      </div>
 		  	</div>
+		 </div>
+		 <div class="row">
+		 	<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao()">Confirm</button>
 		 </div>
 	  	
 	  </div>

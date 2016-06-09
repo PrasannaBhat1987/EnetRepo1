@@ -30,6 +30,10 @@ sampleApp .config(['$routeProvider',
         templateUrl: 'templates/show-branches.html',
         controller: 'BranchController'
       }).
+      when('/dashboard', {
+          templateUrl: 'templates/show-dashboard.html',
+          controller: 'DashboardController'
+        }).
       otherwise({
         redirectTo: '/dashboard'
       });
@@ -189,6 +193,8 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.orderNumber='';
 	$scope.orderDate = new Date();
 	$scope.websiteName = '';
+	$scope.raoid = '';
+	jq('#raoid').hide();
 	
 	$scope.getWebsiteName = function() {
 		angular.forEach($scope.websites, function(website, index){
@@ -254,6 +260,19 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	      $scope.branches = response; 
 	});
 	
+	$scope.clearFields = function() {
+		$scope.websiteId = '';
+		$scope.customerid = '';
+		 $scope.branchId = '';
+		 $scope.representativeid = '';
+		$scope.orderDate = '';
+		 $scope.description = '';
+		$scope.lineItems.splice(0, $scope.lineItems.length);
+		 $scope.shippingaddress = '';
+		$scope.orderNumber = '';
+		$scope.raoid = '';
+	}
+	
 	$scope.createRao = function() {
 		$http.post('http://localhost:8083/Enet3/rest/rao/add',{
     		"websiteId" : $scope.websiteId,
@@ -268,7 +287,9 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			"orderNumber" : $scope.orderNumber
     	}).success( function(response) {
     		
-    		$scope.message = 'Rao created !!'; 
+			alert("New RAO created with ID : " + response);
+			$scope.raoid = response;
+			jq('#raoid').show();
     	});
 	}
 	
@@ -674,6 +695,58 @@ sampleApp.controller('EditProfileController',function($scope, $http, $cookies, $
 		});
 });
 
+
+
+
+
+
+sampleApp.controller('DashboardController',function($scope, $http, $cookies, $window) {
+	
+	
+	$http.get('http://localhost:8083/Enet3/rest/representative/getNumbers').success( function(response) {
+	      $scope.numbers = response; 
+	      
+	      jq("#chartContainer").CanvasJSChart({ 
+	  		title: { 
+	  			text: "Users" 
+	  		}, 
+	  		data: [ 
+	  		{ 
+	  			type: "doughnut", 
+	  			toolTipContent: "{label}: {y}",
+	  			dataPoints: [ 
+	  				{ label: "Admin",       y: $scope.numbers.admins}, 
+	  				{ label: "Manager",        y: $scope.numbers.managers}, 
+	  				{ label: "Representatives",y: $scope.numbers.reps} 
+	  			] 
+	  		} 
+	  		] 
+	  	});
+	});
+	
+	
+	$http.get('http://localhost:8083/Enet3/rest/rao/getNumbers').success( function(response) {
+	      $scope.numbers = response; 
+	
+	jq("#chartContainer1").CanvasJSChart({ 
+  		title: { 
+  			text: "Orders" 
+  		}, 
+  		data: [ 
+  		{ 
+  			type: "doughnut", 
+  			toolTipContent: "{label}: {y}",
+  			dataPoints: [ 
+  				{ label: "In Progress",       y: $scope.numbers.inProgress}, 
+  				{ label: "Completed",        y: $scope.numbers.completed}, 
+  				{ label: "Created",			y: $scope.numbers.created} 
+  			] 
+  		}]
+	});
+	});
+	
+	
+});
 
 
 })();

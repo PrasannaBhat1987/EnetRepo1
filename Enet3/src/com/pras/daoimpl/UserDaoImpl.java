@@ -115,4 +115,16 @@ public class UserDaoImpl implements UserDao {
 		return results;
 	}
 
+
+	@Override
+	public int getUserType(String role) {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		Criteria cr = session.createCriteria(User.class);
+		cr.add(Restrictions.eq("role", role));
+		List results = cr.list();
+		session.close();
+		return results.size();
+	}
+
 }
