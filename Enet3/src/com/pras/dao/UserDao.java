@@ -8,7 +8,7 @@ import com.pras.model.User;
 public interface UserDao {
 
 	public void addUser(UserDto user);
-	public void editUser(long id, User user);
+	public int editUser(long id, UserDto dto);
 	public UserDto getUser(long id);
 	public List<UserDto> getUsers();
 	public void removeUserById(long id);

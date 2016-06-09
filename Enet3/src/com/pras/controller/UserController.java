@@ -71,14 +71,20 @@ public class UserController {
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@HeaderParam("Auth") String auth, @PathParam("id") long id,
-			User dto) {
+			UserDto dto) {
 
 		System.out.println("Received User is :" + dto.getName());
 		if (isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
-			dao.editUser(id, dto);
-			return Response.status(200)
-					.entity("This user is removed successfully").build();
+			int returnVal = dao.editUser(id, dto);
+			if(returnVal == 1) {
+				return Response.status(400)
+						.entity("Password is not correct").build();
+			} else {
+				return Response.status(200)
+						.entity("This user is updated successfully").build();
+			}
+			
 		} else {
 			return Response.status(400).entity("You are not authorized")
 					.build();

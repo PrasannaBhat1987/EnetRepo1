@@ -653,10 +653,14 @@ sampleApp.controller('EditProfileController',function($scope, $http, $cookies, $
 	    		"newPassword" : $scope.newPassword,
 			})
 		        .success(function (data, status, headers, config) {
-		        	alert('Data updated successfully. Data will reflect in next login.')
+		        	$scope.newPassword = '';
+		        	$scope.password='';
+		        	$scope.confirmPassword = '';
+		        	$scope.showpass = false;
 		        	jq('#modalCloseMain').click();
 		        })
 		        .error(function (data, status, header, config) {
+		        	$scope.invalidPassword = true;
 		        	alert('Unable to update data. Please try again later.')
 		        });
 	};

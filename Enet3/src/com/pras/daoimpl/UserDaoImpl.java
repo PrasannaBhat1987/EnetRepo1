@@ -35,7 +35,7 @@ public class UserDaoImpl implements UserDao {
 
 
 	@Override
-	public void editUser(long id, User user) {
+	public int editUser(long id, UserDto user) {
 		// TODO Auto-generated method stub
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
@@ -45,18 +45,21 @@ public class UserDaoImpl implements UserDao {
 		User u = (User) session.get(User.class, id);
 		u.setAddress(user.getAddress());
 		u.setName(user.getName());
-		u.setBranches(user.getBranches());
 		u.setContact(user.getContact());
-		u.setEmail(user.getEmail());
 		u.setManagerId(user.getManagerId());
-		u.setName(user.getName());
-		u.setPassword(user.getPassword());
-		u.setRaos(user.getRaos());
-		//u.setSubordinates(user.getSubordinates());
+		if(user.getPassword() != null && (user.getPassword().equals(u.getPassword()))) {
+			
+		}
+		if(user.getNewPassword() != null && (user.getPassword().equals(u.getPassword()))) {
+			u.setPassword(user.getNewPassword());
+		} else {
+			return 1;
+		}
 		u.setRole(user.getRole());
 		session.update(u);
 		session.getTransaction().commit();
 		session.close();
+		return 0;
 	}
 
 	@Override
