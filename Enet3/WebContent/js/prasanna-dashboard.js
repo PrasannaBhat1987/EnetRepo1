@@ -35,7 +35,7 @@ sampleApp .config(['$routeProvider',
       });
   }]);
 
-sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $resource) {
+sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $resource, $window) {
 	
 	$scope.tab = 1;
 	$scope.name = '';
@@ -53,6 +53,10 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	$scope.isSelected = function(checkTab) {
 		return $scope.tab === checkTab;
 	}
+	
+	if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	} 
 	
 	$http.defaults.headers.common['Auth'] = $cookies.Auth;
 	
@@ -99,6 +103,14 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 		        else {
 		            jq('tr.selected').removeClass('selected');
 		            jq(this).addClass('selected');
+		            var d = table.rows('.selected').data()[0];
+		            $scope.id = d.id;
+		            $scope.name = d.name;
+		    	    $scope.email = d.email;
+		    	    $scope.contact = d.contact;
+		    	    $scope.address = d.address;
+		    	    $scope.role = d.role;
+		    	    $scope.manager = d.managerId;
 		        }
 		    } );
 			 
@@ -114,9 +126,30 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	        });
     });
 	
+	
+	$scope.updateUser = function() {
+		$http.put('http://localhost:8083/Enet3/rest/representative/' + $scope.id, {
+			"name" : $scope.name,
+    		"email" : $scope.email,
+    		"contact" : $scope.contact,
+    		"address" : $scope.address,
+    		"role" : $scope.role,
+    		"managerId" : $scope.manager
+		})
+	        .success(function (data, status, headers, config) {
+	        	jq('#modalClose').click();
+	        	$scope.showUsers();
+	        })
+	        .error(function (data, status, header, config) {
+	        });
+	};
 });
  
-sampleApp.controller('CreateRaoController', function($scope, $http, $cookies) {
+sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $window) {
+	
+	if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	} 
 	
 	jq('.custominfo').hide();
 	jq('.repdetails').hide();
@@ -144,7 +177,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies) {
 		"unitPrice" : 1200
 	}];
 	$scope.itemDescription='';
-	$scope.item=';'
+	$scope.item='';
 	$scope.quantity = '';
 	$scope.unitPrice= '';
 	$scope.representativeid = '';
@@ -272,7 +305,13 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies) {
 	};
 });
 
-sampleApp.controller('CreateCustomersController', function($scope, $http, $cookies) {
+sampleApp.controller('CreateCustomersController', function($scope, $http, $cookies, $window) {
+	
+	
+	if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	} 
+	
 	
     $scope.message = 'This is Show orders screen';
     $scope.customerid = '';
@@ -333,11 +372,14 @@ sampleApp.controller('CreateCustomersController', function($scope, $http, $cooki
 			        	jq('tr.selected').removeClass('selected');
 			            jq(this).addClass('selected');
 			            var d = table.rows('.selected').data()[0];
-			            $scope.customerid = d.id;
-			            $scope.customername = d.name;
-			    	    $scope.customeremail = d.email;
-			    	    $scope.customernumber = d.contact;
-			    	    $scope.customeraddress = d.address;
+			            if(d) {
+			            	$scope.customerid = d.id;
+				            $scope.customername = d.name;
+				    	    $scope.customeremail = d.email;
+				    	    $scope.customernumber = d.contact;
+				    	    $scope.customeraddress = d.address;
+			            }
+			            
 			        }
 			    } );
 			 
@@ -372,7 +414,12 @@ sampleApp.controller('CreateCustomersController', function($scope, $http, $cooki
  
 });
 
-sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http) {
+sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http, $window) {
+	
+	if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	} 
+	
 	var table;
 	$scope.tab = 1;
 	$scope.websitename = '';
@@ -434,6 +481,7 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http)
     });
 	
 	$scope.updateWebsite = function() {
+		jq('#modalClose').click();
 		$http.put('http://localhost:8083/Enet3/rest/website/' + $scope.websiteid, {
 			"name" : $scope.websitename,
 		})
@@ -447,11 +495,15 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http)
  
 });
 
-sampleApp.controller('LogoutController',function($scope, $window, $http) {
-    $scope.count = 0;
+sampleApp.controller('LogoutController',function($scope, $window, $http, $cookies) {
+        
+    if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	}
+    
     $scope.logout = function() {
     	$window.location.href = 'http://localhost:8083/Enet3';
-    	$http.defaults.headers.common['Auth'] = '';
+    	$cookies.Auth = '';
     }
     $scope.tab = 1;
 	 $scope.selectTab = function(setTab) {
@@ -462,8 +514,12 @@ sampleApp.controller('LogoutController',function($scope, $window, $http) {
 	 };
 });
 
-sampleApp.controller('BranchController',function($scope, $http, $cookies) {
+sampleApp.controller('BranchController',function($scope, $http, $cookies, $window) {
    
+	if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	}
+	
     $scope.tab = 1;
 	 $scope.selectTab = function(setTab) {
 		 $scope.tab = setTab;
@@ -569,4 +625,51 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies) {
 	    });
 	 
 });
+
+
+
+sampleApp.controller('EditProfileController',function($scope, $http, $cookies, $window) {
+	$scope.message='hellooooooooo';
+	$scope.showpass = false;
+	$scope.newPassword = '';
+	$scope.password='';
+	$scope.confirmPassword = '';
+	$scope.invalidPassword = false;
+	$scope.name = '';
+	$scope.email = '';
+    $scope.contact = '';
+    $scope.address = '';
+	
+	$scope.canShow = function(){
+		return $scope.newPassword !== $scope.confirmPassword;
+	};
+	
+	$scope.editProfile = function() {
+			$http.put('http://localhost:8083/Enet3/rest/representative/' + $cookies.userId, {
+				"name" : $scope.name,
+	    		"contact" : $scope.contact,
+	    		"address" : $scope.address,
+	    		"password" : $scope.password,
+	    		"newPassword" : $scope.newPassword,
+			})
+		        .success(function (data, status, headers, config) {
+		        	alert('Data updated successfully. Data will reflect in next login.')
+		        	jq('#modalCloseMain').click();
+		        })
+		        .error(function (data, status, header, config) {
+		        	alert('Unable to update data. Please try again later.')
+		        });
+	};
+	
+		$http.get('http://localhost:8083/Enet3/rest/representative/'+ $cookies.userId).success( function(response) {
+		      $scope.name = response.name;
+		      $scope.email = response.email;
+		      $scope.contact = response.contact;
+		      $scope.address = response.address;
+		      
+		});
+});
+
+
+
 })();

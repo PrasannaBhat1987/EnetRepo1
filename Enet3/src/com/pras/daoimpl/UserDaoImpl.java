@@ -3,7 +3,9 @@ package com.pras.daoimpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.pras.dao.UserDao;
 import com.pras.dto.UserDto;
@@ -22,6 +24,8 @@ public class UserDaoImpl implements UserDao {
 		// start transaction
 		session.beginTransaction();
 		User u = UserDtoHelper.getEntityFromDto(user);
+		
+		u.setPassword("Password123");
 		//u.setManager((User) session.get(User.class, user.getManagerId()));
 		// Save the Model object
 		session.save(u);
@@ -94,6 +98,18 @@ public class UserDaoImpl implements UserDao {
 		session.delete(user);
 		session.getTransaction().commit();
 		session.close();
+	}
+
+
+	@Override
+	public List<User> getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		Criteria cr = session.createCriteria(User.class);
+		cr.add(Restrictions.eq("email", email));
+		List results = cr.list();
+		return results;
 	}
 
 }

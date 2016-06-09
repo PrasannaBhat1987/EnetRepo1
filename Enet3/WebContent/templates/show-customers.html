@@ -1,9 +1,30 @@
-<h2>Customers</h2>
+<h2 ng-init="showCustomers()">Customers</h2>
 <ul class="nav nav-tabs">
-   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Add</a></li>
-   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2);showCustomers()">Edit/Delete</a></li>
+	<li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1);showCustomers()">Show</a></li>
+    <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2)">Add</a></li>
 </ul>
+
 <div ng-show="isSelected(1)">
+  	<hr>
+  	<h4>Show/Edit Customer</h4>
+  	<hr>
+  	<table id="customerTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+    </table>
+    <button id="deletecustomer" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteCustomer()">Delete Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editcustomer()" data-toggle="modal" data-target="#customerModal">Edit Selected</button>
+</div>
+
+
+<div ng-show="isSelected(2)">
   	<hr>
   	<h4>Add Customer</h4>
   	<hr>
@@ -29,24 +50,7 @@
 </div>
 
 
-<div ng-show="isSelected(2)">
-  	<hr>
-  	<h4>Show/Edit Customer</h4>
-  	<hr>
-  	<table id="customerTable" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Address</th>
-            </tr>
-        </thead>
-    </table>
-    <button id="deletecustomer" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteCustomer()">Delete Selected</button>
-    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editcustomer()" data-toggle="modal" data-target="#customerModal">Edit Selected</button>
-</div>
+
 
 <div class="modal fade" id="customerModal">
     <div class="modal-dialog">

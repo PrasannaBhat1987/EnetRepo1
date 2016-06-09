@@ -1,9 +1,30 @@
-<h2>Users </h2>
+<h2 ng-init="showUsers()">Users </h2>
 <ul class="nav nav-tabs">
-   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Add</a></li>
-   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2);showUsers()">Edit/Delete</a></li>
+   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1);showUsers()">Show</a></li>
+   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2)">Add</a></li>
 </ul>
+
 <div ng-show="isSelected(1)">
+  	<hr>
+  	<h4>Edit/Show Users</h4>
+  	<hr>
+  	<table id="usersTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Role</th>
+                <th>Manager</th>
+            </tr>
+        </thead>
+    </table>
+    <button id="deleteuser" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteUser()">Delete Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editUser()" data-toggle="modal" data-target="#userModal">Edit Selected</button>
+</div>
+
+<div ng-show="isSelected(2)">
   	<hr>
   	<h4>Add User</h4>
   	<hr>
@@ -42,24 +63,53 @@
 </div>
 
 
-<div ng-show="isSelected(2)">
-  	<hr>
-  	<h4>Edit/Show Users</h4>
-  	<hr>
-  	<table id="usersTable" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Role</th>
-                <th>Manager</th>
-            </tr>
-        </thead>
-    </table>
-    <button id="deleteuser" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteUser()">Delete Selected</button>
-    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editUser()">Edit Selected</button>
-</div>
-
+<div class="modal fade" id="userModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit this Customer</h4>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form role="form">
+				  	<div class="form-group">
+						<label for="name">Name:</label> 
+						<input type="text" class="form-control" id="name" ng-model="name" value="{{name}}">
+					</div>
+					<div class="form-group">
+						<label for="email">Email:</label> 
+						<input type="text" class="form-control" id="email" ng-model="email" value="{{email}}">
+					</div>
+					<div class="form-group">
+						<label for="contact">Contact Number:</label> 
+						<input type="text" class="form-control" id="contact" ng-model="contact" value="{{contact}}">
+					</div>
+					<div class="form-group">
+						<label for="address">Address:</label> 
+						<textarea class="form-control" rows="5" id="address" ng-model="address" value={{address}}></textarea>
+					</div>
+					<div class="form-group">
+						<label for="role">Select Role:</label> 
+						<select class="form-control selectpicker" id="role" ng-model="role" value="{{role}}">
+						    <option>Admin</option>
+						    <option>Manager</option>
+						    <option>Representative</option>
+						 </select>
+					</div>
+					<div class="form-group">
+						<label for="manager">Manager ID:</label> 
+						<input type="text" class="form-control" id="manager" ng-model="manager" value="{{manager}}">
+					</div>
+				</form>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="updateUser()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div> 
  

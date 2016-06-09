@@ -15,35 +15,35 @@ $(document).ready(function(){
             return false;
           });
           
-          function Redirect() {
-              window.location="http://localhost:8083/Enet3/dashboard.html";
-           }
-          
-		  $('#login-button').click(function(){
-				var email = $('#email').val();
-				var password = $('#password').val();
-								
-					$.ajax({
-						url: '/Enet3/rest/user/login',
-						dataType: 'text',
-						type: 'post',
-						contentType: 'application/json',						
-						data: JSON.stringify({
-							  "username": email,
-							  "password": password
-							}),
-						success: function( data, textStatus, jQxhr ){
-							var d = new Date();
-						    d.setTime(d.getTime() + (1*24*60*60*1000));
-						    var expires = "expires="+ d.toUTCString();
-						    data = data.substring(data.indexOf(":") + 1).trim();
-						    document.cookie = "Auth=" + data + "; " + expires;
-							Redirect();
-						},
-						error: function( jqXhr, textStatus, errorThrown ){
-							alert(errorThrown);
-						}
-					});
-			});
+//          function Redirect() {
+//              window.location="http://localhost:8083/Enet3/dashboard.html";
+//           }
+//          
+//		  $('#login-button').click(function(){
+//				var email = $('#email').val();
+//				var password = $('#password').val();
+//								
+//					$.ajax({
+//						url: '/Enet3/rest/user/login',
+//						dataType: 'text',
+//						type: 'post',
+//						contentType: 'application/json',						
+//						data: JSON.stringify({
+//							  "username": email,
+//							  "password": password
+//							}),
+//						success: function( data, textStatus, jQxhr ){
+//							var d = new Date();
+//						    d.setTime(d.getTime() + (1*24*60*60*1000));
+//						    var expires = "expires="+ d.toUTCString();
+//						    data = data.substring(data.indexOf(":") + 1).trim();
+//						    document.cookie = "Auth=" + data + "; " + expires;
+//							Redirect();
+//						},
+//						error: function( jqXhr, textStatus, errorThrown ){
+//							alert(errorThrown);
+//						}
+//					});
+//			});
 		  
         });

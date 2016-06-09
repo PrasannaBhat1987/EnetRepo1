@@ -1,23 +1,11 @@
-<h2>Websites</h2>
+<h2 ng-init="showWebsites()">Websites</h2>
 
 <ul class="nav nav-tabs">
-   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Add</a></li>
-   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2);showWebsites()">Edit/Delete</a></li>
+   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1);showWebsites()">Show</a></li>
+   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2)">Add</a></li>
 </ul>
+
 <div ng-show="isSelected(1)">
-  	<hr>
-  	<h4>Add Website</h4>
-  	<hr>
-  	{{message}}
-  	<form role="form">
-	  	<div class="form-group">
-			<label for="websitename">Website Name:</label> 
-			<input type="text" class="form-control" id="websitename" ng-model="websitename">
-		</div>
-		<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createWebsite()">Add Website</button>
-	</form>	
-</div>
-<div ng-show="isSelected(2)">
   	<hr>
   	<h4>Edit/Show Website</h4>
   	<hr>
@@ -32,6 +20,22 @@
     <button id="deletewebsite" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteWebsite()">Delete Selected</button>
     <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editWebsite()" data-toggle="modal" data-target="#myModal">Edit Selected</button>
 </div>
+
+
+<div ng-show="isSelected(2)">
+  	<hr>
+  	<h4>Add Website</h4>
+  	<hr>
+  	{{message}}
+  	<form role="form">
+	  	<div class="form-group">
+			<label for="websitename">Website Name:</label> 
+			<input type="text" class="form-control" id="websitename" ng-model="websitename">
+		</div>
+		<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createWebsite()">Add Website</button>
+	</form>	
+</div>
+
 
 <div class="modal fade" id="myModal">
     <div class="modal-dialog">

@@ -12,4 +12,5 @@ public interface UserDao {
 	public UserDto getUser(long id);
 	public List<UserDto> getUsers();
 	public void removeUserById(long id);
+	public List<User> getUserByEmail(String email);
 }

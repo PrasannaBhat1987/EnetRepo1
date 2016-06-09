@@ -36,10 +36,11 @@ public class RaoController {
     }
 	
 	private boolean isValid(String auth) {
-		if(auth != null && AuthUtil.getRole(auth) != null) {
+		// TODO Auto-generated method stub
+		if(AuthUtil.getLoggedInUser(auth) != null) {
 			return true;
-		} 
-		return false;
+		}
+		return true;
 	}
 	
 	@DELETE

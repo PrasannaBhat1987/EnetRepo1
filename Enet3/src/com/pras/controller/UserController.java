@@ -43,10 +43,11 @@ public class UserController {
     }
 	
 	private boolean isValid(String auth) {
-		if(auth != null && AuthUtil.getRole(auth) != null) {
+		// TODO Auto-generated method stub
+		if(AuthUtil.getLoggedInUser(auth) != null) {
 			return true;
-		} 
-		return false;
+		}
+		return true;
 	}
 	
 	@DELETE
@@ -67,15 +68,15 @@ public class UserController {
 	}
 	
 	@PUT
-	@Path("/{id}/update")
+	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@HeaderParam("Auth") String auth, @PathParam("id") long id,
-			User user) {
+			User dto) {
 
-		System.out.println("Received User is :" + user.getName());
+		System.out.println("Received User is :" + dto.getName());
 		if (isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
-			dao.editUser(id, user);
+			dao.editUser(id, dto);
 			return Response.status(200)
 					.entity("This user is removed successfully").build();
 		} else {
@@ -93,8 +94,10 @@ public class UserController {
 		if (isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
 			user = dao.getUser(id);
+			return Response.status(200).entity(user).build();
 		}
-		return Response.status(200).entity(user).build();
+		return Response.status(400).entity("You are not authorized")
+				.build();
 	}
 	
 	@GET
@@ -105,7 +108,10 @@ public class UserController {
 		List<UserDto> list = new ArrayList<UserDto>();
 		if (isValid(auth)) {
 			list.addAll(dao.getUsers());
+			return Response.status(200).entity(list).build();
 		}
-		return Response.status(200).entity(list).build();
+		
+		return Response.status(400).entity("You are not authorized")
+				.build();
 	}
 }

@@ -12,7 +12,12 @@ public class UserDtoHelper {
 		u.setContact(dto.getContact());
 		u.setEmail(dto.getEmail());
 		u.setName(dto.getName());
-		u.setPassword(dto.getPassword());
+		if(dto.getPassword() != null) {
+			u.setPassword(dto.getPassword());
+		}
+		if(dto.getNewPassword() != null) {
+			u.setPassword(dto.getNewPassword());
+		}
 		u.setRole(dto.getRole());
 		u.setManagerId(dto.getManagerId());
 		return u;

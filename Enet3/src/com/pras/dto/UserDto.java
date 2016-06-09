@@ -1,5 +1,7 @@
 package com.pras.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 public class UserDto {
 
 	private long id;
@@ -10,7 +12,15 @@ public class UserDto {
 	private String address;
 	private String role;
 	private long managerId;
+	private String newPassword;
 
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 	public String getName() {
 		return name;
 	}

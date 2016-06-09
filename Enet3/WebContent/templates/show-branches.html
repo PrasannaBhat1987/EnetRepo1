@@ -1,9 +1,31 @@
-<h2>Branch </h2>
+<h2 ng-init="showBranches()">Branch </h2>
 <ul class="nav nav-tabs">
-   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Add</a></li>
-   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2);showBranches()">Edit/Delete</a></li>
+   
+   <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1);showBranches()">Show</a></li>
+   <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2)">Add</a></li>
 </ul>
+
 <div ng-show="isSelected(1)">
+  	<hr>
+  	<h4>Show/Edit Branch</h4>
+  	<hr>
+  	<table id="branchTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Place</th>
+                <th>Pincode</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th>ManagerId</th>
+            </tr>
+        </thead>
+    </table>
+    <button id="deletebranch" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteBranch()">Delete Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editbranch()" data-toggle="modal" data-target="#branchModal">Edit Selected</button>
+</div>
+
+<div ng-show="isSelected(2)">
   	<hr>
   	<h4>Add Branch</h4>
   	<hr>
@@ -32,26 +54,6 @@
 	</form>	
 </div>
 
-
-<div ng-show="isSelected(2)">
-  	<hr>
-  	<h4>Show/Edit Branch</h4>
-  	<hr>
-  	<table id="branchTable" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Place</th>
-                <th>Pincode</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>ManagerId</th>
-            </tr>
-        </thead>
-    </table>
-    <button id="deletebranch" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteBranch()">Delete Selected</button>
-    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editbranch()" data-toggle="modal" data-target="#branchModal">Edit Selected</button>
-</div>
 
 <div class="modal fade" id="branchModal">
     <div class="modal-dialog">

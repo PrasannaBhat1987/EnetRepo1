@@ -44,10 +44,11 @@ public class BranchController {
     }
 	
 	private boolean isValid(String auth) {
-		if(auth != null && AuthUtil.getRole(auth) != null) {
+		// TODO Auto-generated method stub
+		if(AuthUtil.getLoggedInUser(auth) != null) {
 			return true;
-		} 
-		return false;
+		}
+		return true;
 	}
 	
 	@DELETE
@@ -93,8 +94,10 @@ public class BranchController {
 		List<BranchDto> list = new ArrayList<BranchDto>();
 		if (isValid(auth)) {
 			list.addAll(dao.getBranches());
+			return Response.status(200).entity(list).build();
 		}
-		return Response.status(200).entity(list).build();
+		return Response.status(400).entity("You are not authorized")
+				.build();
 
 	}
 	
@@ -107,8 +110,10 @@ public class BranchController {
 		BranchDto dto = new BranchDto();
 		if (isValid(auth)) {
 			dto = dao.getBranch(id);
+			return Response.status(200).entity(dto).build();
 		}
-		return Response.status(200).entity(dto).build();
-
+		
+		return Response.status(400).entity("You are not authorized")
+				.build();
 	}
 }

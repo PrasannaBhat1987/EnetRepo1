@@ -21,6 +21,10 @@ import com.pras.daoimpl.BranchDaoImpl;
 import com.pras.daoimpl.CustomerDaoImpl;
 import com.pras.dto.BranchDto;
 import com.pras.dto.CustomerDto;
+import com.pras.dto.LoginDto;
+import com.pras.model.User;
+import com.pras.service.LoginService;
+import com.pras.serviceimpl.LoginServiceImpl;
 import com.pras.util.AuthUtil;
 
 @Path("/customer")
@@ -43,10 +47,11 @@ public class CustomerController {
     }
 	
 	private boolean isValid(String auth) {
-		if(auth != null && AuthUtil.getRole(auth) != null) {
+		// TODO Auto-generated method stub
+		if(AuthUtil.getLoggedInUser(auth) != null) {
 			return true;
-		} 
-		return false;
+		}
+		return true;
 	}
 	
 	@DELETE
@@ -92,8 +97,10 @@ public class CustomerController {
 		List<CustomerDto> list = new ArrayList<CustomerDto>();
 		if (isValid(auth)) {
 			list.addAll(dao.getCustomers());
+			return Response.status(200).entity(list).build();
 		}
-		return Response.status(200).entity(list).build();
+		return Response.status(400).entity("You are not authorized")
+				.build();
 
 	}
 	
@@ -106,9 +113,11 @@ public class CustomerController {
 		CustomerDto dto = new CustomerDto();
 		if (isValid(auth)) {
 			dto = dao.getCustomer(id);
+			return Response.status(200).entity(dto).build();
 		}
-		return Response.status(200).entity(dto).build();
-
+		
+		return Response.status(400).entity("You are not authorized")
+				.build();
 	}
 	
 }

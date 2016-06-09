@@ -3,9 +3,11 @@ package com.pras.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pras.model.User;
+
 public class AuthUtil {
 	private static AuthUtil instance = null;
-	private Map<String,String> authMap = new HashMap<String,String>();
+	private Map<String,User> authMap = new HashMap<String,User>();
 	
 	private AuthUtil() {
 		// Exists only to defeat instantiation.
@@ -18,11 +20,11 @@ public class AuthUtil {
 		return instance;
 	}
 	
-	public static void addAuth(String key, String value){
-		getInstance().authMap.put(key, value);
+	public static void addAuth(String key, User u){
+		getInstance().authMap.put(key, u);
 	}
 	
-	public static String getRole(String key) {
+	public static User getLoggedInUser(String key) {
 		return getInstance().authMap.get(key);
 	}
 	
