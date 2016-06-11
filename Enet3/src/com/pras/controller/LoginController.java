@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import com.pras.dto.LoginDto;
 import com.pras.dto.LoginResponseDto;
+import com.pras.exception.ErrorInfo;
 import com.pras.model.User;
 import com.pras.service.LoginService;
 import com.pras.serviceimpl.LoginServiceImpl;
@@ -26,7 +27,7 @@ public class LoginController {
 	@Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Response login(LoginDto cred){
+    public Response login(LoginDto cred) {
          
         System.out.println("UserName :"+ cred.getUsername());
         System.out.println("Password: "+ cred.getPassword());
@@ -54,7 +55,8 @@ public class LoginController {
         	dto.setRole(u.getRole());
         	return Response.status(200).entity(dto).build();
         }
-        return Response.status(400).entity("Unable to authenticate user. Try again").build();
+        ErrorInfo info = new ErrorInfo(401, "Unable to authenticate user. Try again");
+        return Response.status(401).entity(info).build();
     }
 
 	private boolean ifValid(LoginDto user, String Auth) {

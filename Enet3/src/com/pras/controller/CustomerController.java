@@ -22,6 +22,7 @@ import com.pras.daoimpl.CustomerDaoImpl;
 import com.pras.dto.BranchDto;
 import com.pras.dto.CustomerDto;
 import com.pras.dto.LoginDto;
+import com.pras.exception.ErrorInfo;
 import com.pras.model.User;
 import com.pras.service.LoginService;
 import com.pras.serviceimpl.LoginServiceImpl;
@@ -112,7 +113,13 @@ public class CustomerController {
 		CustomerDao dao = new CustomerDaoImpl();
 		CustomerDto dto = new CustomerDto();
 		if (isValid(auth)) {
-			dto = dao.getCustomer(id);
+			try{
+				dto = dao.getCustomer(id);
+			} catch (Exception e) {
+				ErrorInfo info = new ErrorInfo(500, "Use does not exist. Check the User ID provided.");
+				return Response.status(500).entity(info).build();
+			}
+			
 			return Response.status(200).entity(dto).build();
 		}
 		

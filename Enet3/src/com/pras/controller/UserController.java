@@ -21,6 +21,7 @@ import com.pras.counts.UserCount;
 import com.pras.dao.UserDao;
 import com.pras.daoimpl.UserDaoImpl;
 import com.pras.dto.UserDto;
+import com.pras.exception.ErrorInfo;
 import com.pras.model.User;
 import com.pras.util.AuthUtil;
 
@@ -100,7 +101,13 @@ public class UserController {
 		UserDto user = new UserDto();
 		if (isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
-			user = dao.getUser(id);
+			try {
+				user = dao.getUser(id);
+			} catch (Exception e) {
+				ErrorInfo info = new ErrorInfo(500, "Representative does not exist. Check the Representative ID provided.");
+				return Response.status(500).entity(info).build();
+			}
+			
 			return Response.status(200).entity(user).build();
 		}
 		return Response.status(400).entity("You are not authorized")

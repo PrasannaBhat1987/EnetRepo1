@@ -271,6 +271,8 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		 $scope.shippingaddress = '';
 		$scope.orderNumber = '';
 		$scope.raoid = '';
+		jq('.custominfo').hide();
+		jq('.repdetails').hide();
 	}
 	
 	$scope.createRao = function() {
@@ -307,6 +309,10 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		      $scope.customername = response.name;
 		      $scope.customeraddress = response.address;
 		      $scope.shippingaddress =  response.address;
+		}).error(function (errorInfo){
+			jq('#error').click();
+			$scope.errorCode = errorInfo.status;
+			$scope.errorMessage = errorInfo.message;
 		});
 	};
  
@@ -322,6 +328,10 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		      $scope.representativecontact = response.contact;
 		      $scope.representativeemail = response.email;
 		      $scope.representativename = response.name;
+		}).error(function (errorInfo){
+			jq('#error').click();
+			$scope.errorCode = errorInfo.status;
+			$scope.errorMessage = errorInfo.message;
 		});
 	};
 });
