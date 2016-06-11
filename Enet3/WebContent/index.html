@@ -429,7 +429,7 @@
 					</div> 
 				</div>					
                 <div class="col-md-12">                  
-                  <button id="login-button" type="submit" class="btn btn-primary btn-submit" ng-click="login()">LOGIN</button>
+                  <button id="login-button" type="submit" class="btn btn-primary btn-submit" ng-click="login()" ng-disabled="processing">LOGIN</button>
                 </div>
               </form>
               <div ng-show="error" class="text-danger"><h3>Username or password does not match</h3></div>

@@ -47,15 +47,15 @@ public class UserDaoImpl implements UserDao {
 		u.setName(user.getName());
 		u.setContact(user.getContact());
 		u.setManagerId(user.getManagerId());
-		if(user.getPassword() != null && (user.getPassword().equals(u.getPassword()))) {
-			
-		}
 		if(user.getNewPassword() != null && (user.getPassword().equals(u.getPassword()))) {
 			u.setPassword(user.getNewPassword());
 		} else {
 			return 1;
 		}
-		u.setRole(user.getRole());
+		if(user.getRole() != null) {
+			u.setRole(user.getRole());
+		}
+		
 		session.update(u);
 		session.getTransaction().commit();
 		session.close();
