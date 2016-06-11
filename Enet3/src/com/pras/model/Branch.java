@@ -26,7 +26,7 @@ public class Branch implements Serializable {
 	private String contact;
 	
 	@ManyToOne
-    @JoinColumn(name="manager_id")
+    @JoinColumn(name="manager_id", nullable= true)
 	private User branchmanager;
 
 	@OneToMany(mappedBy="branch")

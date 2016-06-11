@@ -20,7 +20,7 @@
 			<input type="text" class="form-control" id="customerid" ng-model="customerid">
 		</div>
 		<div class="form-group">
-			<button class="btn btn-primary center-block" ng-click="fetchCustomer()">Fetch Customer</button>
+			<button id="fetchCustomer" class="btn btn-primary center-block" ng-click="fetchCustomer()">Fetch Customer</button>
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary center-block" ng-click="clearFields()">Clear All Fields</button>
@@ -291,7 +291,7 @@
 		  	</div>
 		 </div>
 		 <div class="row">
-		 	<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao()">Confirm</button>
+		 	<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao()" ng-disabled="disableConfirm">Confirm</button>
 		 </div>
 	  	
 	  </div>

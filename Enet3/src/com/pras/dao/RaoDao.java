@@ -1,5 +1,6 @@
 package com.pras.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.pras.dto.RaoDto;
@@ -13,5 +14,6 @@ public interface RaoDao {
 	public List<RaoDto> getAll();
 	public RaoDto getRao(long id);
 	public int getRaoType(String string);
+	public Collection<? extends RaoDto> getAllRaos();
 	
 }

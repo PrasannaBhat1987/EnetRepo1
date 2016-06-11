@@ -1,5 +1,8 @@
 package com.pras.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Session;
 
 import com.pras.model.Branch;
@@ -28,15 +31,16 @@ public class HibernateMain {
 		session.save(website3);
 		session.save(website4);
 		
-		
-		
 		User user1 = new User();
 		user1.setName("Prasanna");
 		user1.setAddress("PrasannaAddress");
 		user1.setContact("prasContact");
-		user1.setEmail("prasannaEmail");
-		user1.setPassword("prasannna");
-		session.save(user1);
+		user1.setEmail("p@s.com");
+		user1.setPassword("bhat");
+		user1.setRole("Admin");
+		//user1.setBranch(branch1);
+		//branch1.setBranchmanager(user1);
+		
 		
 		User user2 = new User();
 		user2.setName("Prabhat");
@@ -45,7 +49,8 @@ public class HibernateMain {
 		user2.setEmail("prabhatEmail");
 		user2.setPassword("prabhat");
 		user2.setManagerId(user1.getId());
-		session.save(user2);
+		user2.setRole("Manager");
+		//user2.setBranch(branch1);
 		
 		User user3 = new User();
 		user3.setName("Naveen");
@@ -54,31 +59,33 @@ public class HibernateMain {
 		user3.setEmail("naveenEmail");
 		user3.setPassword("naveen");
 		user3.setManagerId(user1.getId());
-		session.save(user3);
+		user3.setRole("Representative");
 		
+		
+		session.save(user1);
+		session.save(user2);
+		session.save(user3);
 		
 		Branch branch1 = new Branch();
 		branch1.setPlace("Shiralkoppa");
 		branch1.setAddress("Shiralkoppa Address");
 		branch1.setContact("COntactSlkp");
 		branch1.setPincode(111111);
+		
+		branch1.setBranchmanager(user1);
+		
 		session.save(branch1);
 		
-		Branch branch2 = new Branch();
-		branch2.setPlace("Soraba");
-		branch2.setAddress("Soraba Address");
-		branch2.setContact("COntactSoraba");
-		branch2.setPincode(222222);
-		session.save(branch2);
+		user1.setBranch(branch1);
+		user2.setBranch(branch1);
+		user3.setBranch(branch1);
 		
-		Branch branch3 = new Branch();
-		branch3.setPlace("Shikaripura");
-		branch3.setAddress("Shikaripura Address");
-		branch3.setContact("COntactSkpr");
-		branch3.setPincode(333333);
-		session.save(branch3);
-        
-        
+		List<User> employees = new ArrayList<User>();
+		employees.add(user1);
+		employees.add(user2);
+		employees.add(user3);
+		branch1.setBranchEmployees(employees);
+		
         //Commit transaction
         session.getTransaction().commit();
         

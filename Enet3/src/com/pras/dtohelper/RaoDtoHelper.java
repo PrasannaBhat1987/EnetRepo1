@@ -1,7 +1,9 @@
 package com.pras.dtohelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.pras.dto.LineItemDto;
 import com.pras.dto.RaoDto;
 import com.pras.model.LineItem;
 import com.pras.model.Rao;
@@ -23,20 +25,35 @@ public class RaoDtoHelper {
 	public static RaoDto getDtoFromEntity(Rao r) {
 		RaoDto dto = new RaoDto();
 		dto.setId(r.getId());
-		dto.setBranchId(r.getBranch().getId());
-		dto.setCustomerId(r.getCustomer().getId());
+		
+		if(r.getBranch() != null) {
+			dto.setBranchId(r.getBranch().getId());
+		}
+		
+		if(r.getCustomer() != null) {
+			dto.setCustomerId(r.getCustomer().getId());
+		}
+		
 		dto.setDescription(r.getDescription());
-		dto.setUserId(r.getUser().getId());
-		dto.setUserId(r.getWebsite().getId());
+		if(r.getUser() != null) {
+			dto.setUserId(r.getUser().getId());
+		}
+		
+		if(r.getWebsite() != null) {
+			dto.setWebsiteId(r.getWebsite().getId());
+		}
+		
 		dto.setOrderNumber(r.getOrderNumber());
 		dto.setOrderDate(r.getOrderDate());
 		dto.setDeliveryAddress(r.getDeliveryAddress());
 		dto.setStatus(r.getStatus());
 		dto.setTotal(r.getTotal());
 		List<LineItem> items = r.getItems();
+		List<LineItemDto> dtos = new ArrayList<LineItemDto>();
 		for(int i=0;i<items.size();i++) {
-			
+			dtos.add(LineItemDtoHelper.getDtoFromEntity(items.get(i)));
 		}
+		dto.setLineItems(dtos);
 		return dto;
 	}
 	

@@ -1,0 +1,19 @@
+<div ng-init="showRaos()">
+  	<hr>
+  	<h4>Show Rao</h4>
+  	<hr>
+  	<table id="raoTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Order #</th>
+                <th>Order Date</th>
+                <th>Status</th>
+                <th>TotalAmount</th>
+            </tr>
+        </thead>
+    </table>
+    <button id="deleteRao" class="btn btn-primary col-sm-2 col-sm-offset-2" ng-click="deleteRao()">Delete Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editRao()">Edit Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="viewRao()">View Details</button>
+</div>

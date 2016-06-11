@@ -1,6 +1,7 @@
 package com.pras.daoimpl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -34,6 +35,8 @@ public class RaoDaoImpl implements RaoDao{
         Rao rao = (Rao) session.get(Rao.class, id);
         //Save the Model object
         session.delete(rao);
+        session.getTransaction().commit();
+        session.close();
 	}
 
 	@Override
@@ -76,8 +79,10 @@ public class RaoDaoImpl implements RaoDao{
         //start transaction
         session.beginTransaction();
         Rao dao = (Rao) session.get(Rao.class, id);
+        RaoDto dto =  RaoDtoHelper.getDtoFromEntity(dao);
         session.close();
-        return RaoDtoHelper.getDtoFromEntity(dao);
+        return dto;
+        
 	}
 
 	@Override
@@ -117,5 +122,19 @@ public class RaoDaoImpl implements RaoDao{
 		List results = cr.list();
 		session.close();
 		return results.size();
+	}
+
+	@Override
+	public Collection<? extends RaoDto> getAllRaos() {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		Criteria cr = session.createCriteria(Rao.class);
+		List<Rao> results = cr.list();
+		List<RaoDto> dtos = new ArrayList<RaoDto>();
+		for (int i=0;i<results.size();i++) {
+			dtos.add(RaoDtoHelper.getDtoFromEntity(results.get(i)));
+		}
+		session.close();
+		return dtos;
 	}
 }

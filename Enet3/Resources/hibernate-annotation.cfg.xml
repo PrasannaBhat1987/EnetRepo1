@@ -17,11 +17,13 @@
         <property name="hbm2ddl.auto">update</property>
         
         <!-- Mapping with model class containing annotations -->
+        
+        <mapping class="com.pras.model.Website"/>
+        <mapping class="com.pras.model.Rao"/>
         <mapping class="com.pras.model.User"/>
         <mapping class="com.pras.model.Customer"/>
         <mapping class="com.pras.model.Branch"/>
         <mapping class="com.pras.model.LineItem"/>
-        <mapping class="com.pras.model.Rao"/>
-        <mapping class="com.pras.model.Website"/>
+        
     </session-factory>
 </hibernate-configuration>

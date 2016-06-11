@@ -11,8 +11,10 @@ public class UserDto {
 	private String contact;
 	private String address;
 	private String role;
-	private long managerId;
+	private Long managerId;
+	private Long branchId;
 	private String newPassword;
+	private String status;
 
 	public String getNewPassword() {
 		return newPassword;
@@ -61,11 +63,11 @@ public class UserDto {
 		this.address = address;
 	}
 
-	public long getManagerId() {
+	public Long getManagerId() {
 		return managerId;
 	}
 
-	public void setManagerId(long managerId) {
+	public void setManagerId(Long managerId) {
 		this.managerId = managerId;
 	}
 
@@ -83,6 +85,22 @@ public class UserDto {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public Long getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(Long branchId) {
+		this.branchId = branchId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

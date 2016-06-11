@@ -1,5 +1,8 @@
 package com.pras.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,10 +17,13 @@ import javax.ws.rs.core.Response;
 
 import com.pras.counts.RaoCount;
 import com.pras.counts.UserCount;
+import com.pras.dao.BranchDao;
 import com.pras.dao.RaoDao;
 import com.pras.dao.UserDao;
+import com.pras.daoimpl.BranchDaoImpl;
 import com.pras.daoimpl.RaoDaoImpl;
 import com.pras.daoimpl.UserDaoImpl;
+import com.pras.dto.BranchDto;
 import com.pras.dto.RaoDto;
 import com.pras.model.Rao;
 import com.pras.util.AuthUtil;
@@ -50,8 +56,7 @@ public class RaoController {
 	}
 	
 	@DELETE
-	@Path("{id}/delete")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
 	public Response delete(@HeaderParam("Auth") String auth,
 			@PathParam("id") long id) {
 
@@ -97,6 +102,38 @@ public class RaoController {
 			ct.setInProgress(dao.getRaoType("In Progress"));
 			return Response.status(200).entity(ct).build();
 		}
+		return Response.status(400).entity("You are not authorized")
+				.build();
+	}
+	
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response allBranches(@HeaderParam("Auth") String auth) {
+
+		RaoDao dao = new RaoDaoImpl();
+		List<RaoDto> list = new ArrayList<RaoDto>();
+		if (isValid(auth)) {
+			list.addAll(dao.getAllRaos());
+			return Response.status(200).entity(list).build();
+		}
+		return Response.status(400).entity("You are not authorized")
+				.build();
+
+	}
+	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response get(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
+
+		RaoDao dao = new RaoDaoImpl();
+		RaoDto dto = new RaoDto();
+		if (isValid(auth)) {
+			dto = dao.getRao(id);
+			return Response.status(200).entity(dto).build();
+		}
+		
 		return Response.status(400).entity("You are not authorized")
 				.build();
 	}

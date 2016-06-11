@@ -1,6 +1,5 @@
 package com.pras.dto;
 
-import com.pras.model.User;
 
 public class BranchDto {
 

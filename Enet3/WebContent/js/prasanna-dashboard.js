@@ -6,6 +6,8 @@
 		
 var sampleApp = angular.module('enetDashboardApp', ['ngCookies','ngResource']);
 var jq = $.noConflict();
+var selectedRaoId;
+var viewRaoClicked;
   
 sampleApp .config(['$routeProvider',
   function($routeProvider) {
@@ -33,7 +35,11 @@ sampleApp .config(['$routeProvider',
       when('/dashboard', {
           templateUrl: 'templates/show-dashboard.html',
           controller: 'DashboardController'
-        }).
+	  }).
+	  when('/rao', {
+	      templateUrl: 'templates/show-rao.html',
+	      controller: 'ShowRaoController'
+	  }).  
       otherwise({
         redirectTo: '/dashboard'
       });
@@ -48,6 +54,10 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	$scope.address = '';
 	$scope.role = '';
 	$scope.manager = '';
+	$scope.assignbranch = false;
+	$scope.branchId = '';
+	$scope.branches = [];
+	
 	var table;
 	
 	$scope.selectTab = function(setTab) {
@@ -80,6 +90,10 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
     	    $scope.role = '';
     	    $scope.manager = '';
     		$scope.message = 'User added !!'; 
+    	}).error(function(errorInfo) {
+    		jq('#error').click();
+			$scope.errorCode = errorInfo.status;
+			$scope.errorMessage = errorInfo.message;
     	});
 	};
 	
@@ -115,6 +129,7 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 		    	    $scope.address = d.address;
 		    	    $scope.role = d.role;
 		    	    $scope.manager = d.managerId;
+		    	    $scope.branchId = d.branchId;
 		        }
 		    } );
 			 
@@ -132,13 +147,16 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	
 	
 	$scope.updateUser = function() {
+		$scope.assignbranch = false;
+		
 		$http.put('http://localhost:8083/Enet3/rest/representative/' + $scope.id, {
 			"name" : $scope.name,
     		"email" : $scope.email,
     		"contact" : $scope.contact,
     		"address" : $scope.address,
     		"role" : $scope.role,
-    		"managerId" : $scope.manager
+    		"managerId" : $scope.manager,
+    		"branchId" : $scope.branchId
 		})
 	        .success(function (data, status, headers, config) {
 	        	jq('#modalClose').click();
@@ -146,6 +164,17 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	        })
 	        .error(function (data, status, header, config) {
 	        });
+	};
+	
+	$scope.assignBranchToUser = function() {
+		if($scope.assignbranch) {
+			$http.get('http://localhost:8083/Enet3/rest/branch/all').success( function(response) {
+			      $scope.branches = response; 
+			});
+			jq('.assignBranch').show();
+		} else {
+			jq('.assignBranch').hide();
+		}
 	};
 });
  
@@ -194,7 +223,43 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.orderDate = new Date();
 	$scope.websiteName = '';
 	$scope.raoid = '';
+	$scope.total = 0;
+	$scope.disableConfirm = false;
 	jq('#raoid').hide();
+	
+	$http.defaults.headers.common['Auth'] = $cookies.Auth;
+	$http.get('http://localhost:8083/Enet3/rest/website/all').success( function(response) {
+	      $scope.websites = response; 
+	});  
+	$http.get('http://localhost:8083/Enet3/rest/branch/all').success( function(response) {
+	      $scope.branches = response; 
+	});
+	
+	if(selectedRaoId) {
+		$http.get('http://localhost:8083/Enet3/rest/rao/' + selectedRaoId).success( function(response) {
+			$scope.websiteId = response.websiteId;
+			$scope.customerid = response.customerId;
+			 $scope.branchId = response.branchId;
+			 $scope.representativeid = response.userId;
+			$scope.orderDate = response.orderDate;
+			 $scope.description = response.description;
+			$scope.lineItems = response.lineItems;
+			 $scope.shippingaddress = response.deliveryAddress;
+			$scope.orderNumber = response.orderNumber;
+			$scope.raoid = selectedRaoId; 
+			jq('#raoid').show();
+			$scope.fetchCustomer();
+			$scope.fetchRepresentative();
+			if(viewRaoClicked) {
+				$scope.tab = 6;
+				$scope.disableConfirm = true;
+			}
+			$scope.getWebsiteName();
+			selectedRaoId = null;
+		});
+	}
+	
+	
 	
 	$scope.getWebsiteName = function() {
 		angular.forEach($scope.websites, function(website, index){
@@ -252,13 +317,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		return $scope.tab === checkTab;
 	}
 	
-	$http.defaults.headers.common['Auth'] = $cookies.Auth;
-	$http.get('http://localhost:8083/Enet3/rest/website/all').success( function(response) {
-	      $scope.websites = response; 
-	});  
-	$http.get('http://localhost:8083/Enet3/rest/branch/all').success( function(response) {
-	      $scope.branches = response; 
-	});
+	
 	
 	$scope.clearFields = function() {
 		$scope.websiteId = '';
@@ -276,6 +335,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	}
 	
 	$scope.createRao = function() {
+		$scope.disableConfirm = true;
 		$http.post('http://localhost:8083/Enet3/rest/rao/add',{
     		"websiteId" : $scope.websiteId,
     		"customerId" : $scope.customerid,
@@ -286,12 +346,15 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
     		"description" : $scope.description,
     		"lineItems" : $scope.lineItems,
 			"deliveryAddress" : $scope.shippingaddress,
-			"orderNumber" : $scope.orderNumber
+			"orderNumber" : $scope.orderNumber,
+			"total" : $scope.total
     	}).success( function(response) {
     		
 			alert("New RAO created with ID : " + response);
 			$scope.raoid = response;
 			jq('#raoid').show();
+    	}).error( function(errorInfo) {    		
+    		$scope.disableConfirm = false;
     	});
 	}
 	
@@ -758,5 +821,78 @@ sampleApp.controller('DashboardController',function($scope, $http, $cookies, $wi
 	
 });
 
+
+sampleApp.controller('ShowRaoController',function($scope, $window, $http, $cookies) {
+    var table;
+    selectedRaoId = null;
+    
+    
+    
+    $scope.showRaos = function() {
+    	$http.get('http://localhost:8083/Enet3/rest/rao/all').success( function(response) {
+	  	      $scope.raos = response; 
+	  	      
+	  	      table = jq('#raoTable').DataTable( {
+	  		        "data": $scope.raos,
+	  		        destroy: true,
+	  		        "columns": [
+	  		            { "data": "id" },
+	  		            { "data": "orderNumber" },
+	  		            { "data": "orderDate", 
+	  		            	"render": function (data) {
+	  		                    return new Date(data);
+	  		                }
+	  		            },
+	  		            { "data": "status" },
+	  		            { "data": "total" }
+	  		        ]
+	  		    } );
+	  	      
+	  	      jq('#raoTable tbody').on( 'click', 'tr', function () {
+	  		        if ( jq(this).hasClass('selected') ) {
+	  		            jq(this).removeClass('selected');
+	  		        }
+	  		        else {
+	  		            jq('tr.selected').removeClass('selected');
+	  		            jq(this).toggleClass('selected');
+	  		            var d = table.row( this ).data();
+	  		            //var d = table.rows('.selected').data()[0];
+	  		            selectedRaoId = d.id;
+	  		        }
+	  		    } );
+	  	});
+    };
+    
+    if(!$cookies.Auth) {
+		$window.location.href = 'http://localhost:8083/Enet3/#login';
+	} 
+    
+    $scope.editRao = function() {
+    	if(selectedRaoId) {
+    		viewRaoClicked = false;
+        	$window.location.href = 'http://localhost:8083/Enet3/dashboard.html#/createrao';
+    	}
+    };
+    
+    $scope.viewRao = function() {
+    	if(selectedRaoId) {
+    		viewRaoClicked = true;
+        	$window.location.href = 'http://localhost:8083/Enet3/dashboard.html#/createrao';
+    	}
+    };
+    
+    jq('#deleteRao').click( function () {
+    	var d = table.rows('.selected').data()[0];
+    	$http.delete('http://localhost:8083/Enet3/rest/rao/' + d.id)
+	        .success(function (data, status, headers) {
+	        	table.row('.selected').remove().draw( false );
+	        	selectedRaoId = null;
+	        	
+	        })
+	        .error(function (data, status, header, config) {
+	        });
+    });
+   
+});
 
 })();

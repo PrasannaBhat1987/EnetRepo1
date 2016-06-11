@@ -7,11 +7,11 @@ import com.pras.model.User;
 
 public interface UserDao {
 
-	public void addUser(UserDto user);
+	public int addUser(UserDto user);
 	public int editUser(long id, UserDto dto);
 	public UserDto getUser(long id);
 	public List<UserDto> getUsers();
 	public void removeUserById(long id);
-	public List<User> getUserByEmail(String email);
+	public User getUserByEmail(String email);
 	public int getUserType(String string);
 }

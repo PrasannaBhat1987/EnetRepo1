@@ -12,6 +12,10 @@ public class UserDtoHelper {
 		u.setContact(dto.getContact());
 		u.setEmail(dto.getEmail());
 		u.setName(dto.getName());
+		if(dto.getStatus() != null) {
+			u.setStatus(dto.getStatus());
+		}
+		
 		if(dto.getPassword() != null) {
 			u.setPassword(dto.getPassword());
 		}
@@ -33,6 +37,10 @@ public class UserDtoHelper {
 		dto.setPassword(user.getPassword());
 		dto.setRole(user.getRole());
 		dto.setManagerId(user.getManagerId());
+		if(user.getBranch() != null) {
+			dto.setBranchId(user.getBranch().getId());
+		}
+		dto.setStatus(user.getStatus());
 		return dto;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,7 +25,7 @@ public class Rao implements Serializable{
 	private long id;
 	private String description;
 	
-	@OneToMany(mappedBy="rao", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="rao", cascade = CascadeType.ALL)
 	private List<LineItem> items;
 	
 	@ManyToOne

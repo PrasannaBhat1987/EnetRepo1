@@ -32,15 +32,24 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("/add")
     public Response add(@HeaderParam("Auth") String auth, UserDto user){
-         
+		ErrorInfo info = new ErrorInfo(); 
 		if (isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
-			dao.addUser(user);
+			int returnCode = dao.addUser(user);
+			if(returnCode == 1) {
+				info.setStatus(500);
+				info.setMessage("This User with provided Email ID already Exist in the database. Previously someone deleted this user from the system. Send email to the Admin to revive this user.");
+				return Response.status(500)
+						.entity(info).build();
+			} else {
 			return Response.status(200)
 					.entity("This user is added successfully").build();
+			}
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			info.setStatus(400);
+			info.setMessage("You are not authorized");
+			return Response.status(200)
+					.entity(info).build();
 		}
     }
 	

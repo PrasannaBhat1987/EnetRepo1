@@ -116,7 +116,7 @@ public class CustomerController {
 			try{
 				dto = dao.getCustomer(id);
 			} catch (Exception e) {
-				ErrorInfo info = new ErrorInfo(500, "Use does not exist. Check the User ID provided.");
+				ErrorInfo info = new ErrorInfo(500, "Customer with this ID does not exist. Check the Customer ID provided.");
 				return Response.status(500).entity(info).build();
 			}
 			

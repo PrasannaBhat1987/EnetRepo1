@@ -10,13 +10,14 @@ import org.hibernate.criterion.Restrictions;
 import com.pras.dao.UserDao;
 import com.pras.dto.UserDto;
 import com.pras.dtohelper.UserDtoHelper;
+import com.pras.model.Branch;
 import com.pras.model.User;
 import com.pras.util.HibernateUtil;
 
 public class UserDaoImpl implements UserDao {
 
 	@Override
-	public void addUser(UserDto user) {
+	public int addUser(UserDto user) {
 		// TODO Auto-generated method stub
 		// Get Session
 		Session session = HibernateUtil.getSessionAnnotationFactory()
@@ -25,12 +26,19 @@ public class UserDaoImpl implements UserDao {
 		session.beginTransaction();
 		User u = UserDtoHelper.getEntityFromDto(user);
 		
+		User exist = getUserByEmail(u.getEmail());
+		if(exist != null) {
+			return 1;
+		}
+			
 		u.setPassword("Password123");
+		u.setStatus("Created");
 		//u.setManager((User) session.get(User.class, user.getManagerId()));
 		// Save the Model object
 		session.save(u);
 		session.getTransaction().commit();
 		session.close();
+		return 0;
 	}
 
 
@@ -47,15 +55,23 @@ public class UserDaoImpl implements UserDao {
 		u.setName(user.getName());
 		u.setContact(user.getContact());
 		u.setManagerId(user.getManagerId());
-		if(user.getNewPassword() != null && (user.getPassword().equals(u.getPassword()))) {
-			u.setPassword(user.getNewPassword());
-		} else {
-			return 1;
+		if(user.getNewPassword() != null) {
+			if (user.getPassword().equals(u.getPassword())) {
+				u.setPassword(user.getNewPassword());
+			} else {
+				return 1;
+			}
 		}
 		if(user.getRole() != null) {
 			u.setRole(user.getRole());
 		}
-		
+		if(user.getBranchId()!= null) {
+			Branch b = (Branch)session.get(Branch.class, user.getBranchId());
+			u.setBranch(b);
+		}
+		if(user.getManagerId()!= null) {
+			u.setManagerId(user.getManagerId());
+		}
 		session.update(u);
 		session.getTransaction().commit();
 		session.close();
@@ -81,7 +97,10 @@ public class UserDaoImpl implements UserDao {
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		session.beginTransaction();
-		List<User> users = session.createCriteria(User.class).list();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.ne("status", "Deleted"));
+		List<User> users = criteria.list();
+		//List<User> users = session.createCriteria(User.class).list();
 		List<UserDto> dtos = new ArrayList<UserDto>();
 		
 		for(int i=0;i<users.size();i++) {
@@ -98,21 +117,28 @@ public class UserDaoImpl implements UserDao {
 				.openSession();
 		session.beginTransaction();
 		User user = (User) session.get(User.class, id);
-		session.delete(user);
+		
+		user.setStatus("Deleted");
+		session.update(user);
+		//session.delete(user);
 		session.getTransaction().commit();
 		session.close();
 	}
 
 
 	@Override
-	public List<User> getUserByEmail(String email) {
+	public User getUserByEmail(String email) {
 		// TODO Auto-generated method stub
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		Criteria cr = session.createCriteria(User.class);
 		cr.add(Restrictions.eq("email", email));
-		List results = cr.list();
-		return results;
+		List<User> results = cr.list();
+		User u = null;
+		if(results.size() == 1) {
+			u = results.get(0);
+		}
+		return u;
 	}
 
 

@@ -33,14 +33,15 @@ public class User implements Serializable{
 	private String address;
 	private String role;
 	private long managerId;
+	private String status;
 	
 	@ManyToOne
-	@JoinColumn(name="branch_id")
+	@JoinColumn(name="branch_id",  nullable= true)
 	private Branch branch;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="branchmanager")
-	private List<Branch> branches;
+//	@JsonIgnore
+//	@OneToMany(mappedBy="branchmanager")
+//	private List<Branch> branches;
 
 //	@JsonBackReference
 //	@ManyToOne(cascade={CascadeType.ALL})
@@ -63,13 +64,13 @@ public class User implements Serializable{
 		this.raos = raos;
 	}
 	
-	public List<Branch> getBranches() {
-		return branches;
-	}
-
-	public void setBranches(List<Branch> branches) {
-		this.branches = branches;
-	}
+//	public List<Branch> getBranches() {
+//		return branches;
+//	}
+//
+//	public void setBranches(List<Branch> branches) {
+//		this.branches = branches;
+//	}
 
 	public long getId() {
 		return id;
@@ -157,6 +158,14 @@ public class User implements Serializable{
 
 	public void setBranch(Branch branch) {
 		this.branch = branch;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

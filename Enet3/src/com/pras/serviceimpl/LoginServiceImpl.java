@@ -14,9 +14,8 @@ public class LoginServiceImpl implements LoginService {
 	public User validUser(LoginDto login) {
 		// TODO Auto-generated method stub
 		UserDao dao = new UserDaoImpl();
-		List<User> users = dao.getUserByEmail(login.getUsername());
-		if(users.size() == 1) {
-			User u = users.get(0);
+		User u = dao.getUserByEmail(login.getUsername());
+		if(u != null) {
 			if(u.getPassword().equals(login.getPassword())) {
 				return u;
 			}
