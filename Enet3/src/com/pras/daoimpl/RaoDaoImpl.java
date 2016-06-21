@@ -48,11 +48,15 @@ public class RaoDaoImpl implements RaoDao{
         //Save the Model object
         Rao rao = (Rao) session.get(Rao.class, id);
         rao.setDescription(dto.getDescription());
+        rao.setDeliveryAddress(dto.getDeliveryAddress());
+        rao.setOrderDate(dto.getOrderDate());
+        rao.setOrderNumber(dto.getOrderNumber());
+        rao.setStatus(dto.getStatus());
+        rao.setTotal(dto.getTotal());
         rao.setBranch((Branch) session.get(Branch.class, dto.getBranchId()));
         rao.setCustomer((Customer) session.get(Customer.class, dto.getCustomerId()));
         rao.setUser((User) session.get(User.class, dto.getUserId()));
         rao.setWebsite((Website) session.get(Website.class, dto.getWebsiteId()));
-        
         session.saveOrUpdate(rao);
         session.getTransaction().commit();
 	}

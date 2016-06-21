@@ -57,7 +57,13 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	$scope.assignbranch = false;
 	$scope.branchId = '';
 	$scope.branches = [];
+	$scope.id = '';
 	
+	$scope.managerName = '';
+    $scope.managerEmail = '';
+    $scope.managerContact = '';
+    $scope.managerAddress = '';
+	 
 	var table;
 	
 	$scope.selectTab = function(setTab) {
@@ -73,6 +79,29 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	} 
 	
 	$http.defaults.headers.common['Auth'] = $cookies.Auth;
+	
+	$scope.getUserDetails = function() {
+		$http.get('http://localhost:8083/Enet3/rest/representative/'+$scope.id+'/details').success( function(response) {
+		      var manager = response.manager;
+		      $scope.managerName = manager.name;
+		      $scope.managerEmail = manager.email;
+		      $scope.managerContact = manager.contact;
+		      $scope.managerAddress = manager.address;
+		      
+		      var branch = response.branch;
+		      if(branch) {
+		    	  $scope.branchPlace = branch.place;
+			      $scope.branchPincode = branch.pincode;
+			      $scope.branchContact = branch.contact;
+			      $scope.branchAddress = branch.address;
+		      }
+		      
+		      
+		      $scope.raos = response.raos;
+		      
+		});
+	};
+	
 	
 	$scope.addUser = function() {
 		$http.post('http://localhost:8083/Enet3/rest/representative/add',{
@@ -225,6 +254,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.raoid = '';
 	$scope.total = 0;
 	$scope.disableConfirm = false;
+	$scope.status = '';
 	jq('#raoid').hide();
 	
 	$http.defaults.headers.common['Auth'] = $cookies.Auth;
@@ -255,6 +285,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 				$scope.disableConfirm = true;
 			}
 			$scope.getWebsiteName();
+			$scope.status = response.status;
 			selectedRaoId = null;
 		});
 	}
@@ -330,11 +361,20 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		 $scope.shippingaddress = '';
 		$scope.orderNumber = '';
 		$scope.raoid = '';
+		
 		jq('.custominfo').hide();
 		jq('.repdetails').hide();
 	}
 	
 	$scope.createRao = function() {
+		if($scope.raoid && $scope.raoid >0) {
+			$scope.updateRao();
+		} else {
+			$scope.createNewRao();
+		}
+	}
+	
+	$scope.createNewRao = function() {
 		$scope.disableConfirm = true;
 		$http.post('http://localhost:8083/Enet3/rest/rao/add',{
     		"websiteId" : $scope.websiteId,
@@ -342,7 +382,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
     		"branchId" : $scope.branchId,
     		"userId" : $scope.representativeid,
     		"orderDate" : $scope.orderDate,
-    		"status" : "Created",
+    		"status" : "New",
     		"description" : $scope.description,
     		"lineItems" : $scope.lineItems,
 			"deliveryAddress" : $scope.shippingaddress,
@@ -353,6 +393,28 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			alert("New RAO created with ID : " + response);
 			$scope.raoid = response;
 			jq('#raoid').show();
+    	}).error( function(errorInfo) {    		
+    		$scope.disableConfirm = false;
+    	});
+	}
+	
+	$scope.updateRao = function() {
+		$scope.disableConfirm = true;
+		$http.put('http://localhost:8083/Enet3/rest/rao/'+$scope.raoid,{
+    		"websiteId" : $scope.websiteId,
+    		"customerId" : $scope.customerid,
+    		"branchId" : $scope.branchId,
+    		"userId" : $scope.representativeid,
+    		"orderDate" : $scope.orderDate,
+    		"status" : $scope.status,
+    		"description" : $scope.description,
+    		"lineItems" : $scope.lineItems,
+			"deliveryAddress" : $scope.shippingaddress,
+			"orderNumber" : $scope.orderNumber,
+			"total" : $scope.total
+    	}).success( function(response) {
+    		
+			alert("RAO updated");
     	}).error( function(errorInfo) {    		
     		$scope.disableConfirm = false;
     	});
@@ -415,6 +477,7 @@ sampleApp.controller('CreateCustomersController', function($scope, $http, $cooki
     $scope.customeraddress = '';
     $scope.tab = 1;
     $scope.customers = [];
+    $scope.raos = [];
     var table;
     
     $scope.selectTab = function(setTab) {
@@ -426,6 +489,13 @@ sampleApp.controller('CreateCustomersController', function($scope, $http, $cooki
 	}
 	
     $http.defaults.headers.common['Auth'] = $cookies.Auth;
+    
+    $scope.getCustomerDetails = function() {
+    	$http.get('http://localhost:8083/Enet3/rest/customer/'+$scope.customerid +'/details').success( function(response) {
+		      $scope.raos = response.raos; 
+    	});
+	};
+    
     $scope.createCustomer = function() {
     	$http.post('http://localhost:8083/Enet3/rest/customer/add',{
     		"name" : $scope.customername,
@@ -630,6 +700,14 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 	 $scope.branches = [];
 	 $scope.branchid = '';
 	 
+	 $scope.branchManagerName = '';
+	 $scope.branchManagerEmail = '';
+	 $scope.branchManagerContact = '';
+	 $scope.branchManagerAddress = '';
+	 $scope.branchEmployees = [];
+	 $scope.raos = [];
+	 
+	 
 	 $http.defaults.headers.common['Auth'] = $cookies.Auth;
 	 $scope.addBranch = function() {
 		 $http.post('http://localhost:8083/Enet3/rest/branch/add',{
@@ -646,6 +724,30 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 	    		$scope.managerid = '';
 	    		$scope.message = 'Branch added !!'; 
 	    	});
+	 };
+	 
+	 $scope.getBranchDetails = function() {
+		 $http.get('http://localhost:8083/Enet3/rest/branch/'+$scope.branchid+'/details').success( function(response) {
+			 
+			 var manager = response.branchmanager;
+			 if(manager) {
+				 $scope.branchManagerName = manager.name;
+				 $scope.branchManagerEmail = manager.email;
+				 $scope.branchManagerContact = manager.contact;
+				 $scope.branchManagerAddress = manager.address;
+			 }
+			 
+			 $scope.branchEmployees = response.branchEmployees;
+			 if(!$scope.branchEmployees) {
+				 $scope.branchEmployees = [];
+			 }
+			 
+			 $scope.raos = response.raos;
+			 if(!$scope.raos) {
+				 $scope.raos = [];
+			 }
+			 
+		 });
 	 };
 	 
 	 $scope.updateBranch = function() {
@@ -812,7 +914,7 @@ sampleApp.controller('DashboardController',function($scope, $http, $cookies, $wi
   			dataPoints: [ 
   				{ label: "In Progress",       y: $scope.numbers.inProgress}, 
   				{ label: "Completed",        y: $scope.numbers.completed}, 
-  				{ label: "Created",			y: $scope.numbers.created} 
+  				{ label: "New",			y: $scope.numbers.created} 
   			] 
   		}]
 	});

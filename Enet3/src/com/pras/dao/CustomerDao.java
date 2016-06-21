@@ -2,6 +2,7 @@ package com.pras.dao;
 
 import java.util.Collection;
 
+import com.pras.dto.CustomerDetailsDto;
 import com.pras.dto.CustomerDto;
 import com.pras.model.Customer;
 
@@ -12,5 +13,6 @@ public interface CustomerDao {
 	public void editCustomer(long id, CustomerDto cust);
 	public Collection<? extends CustomerDto> getCustomers();
 	public CustomerDto getCustomer(long id);
+	public CustomerDetailsDto getCustomerDetails(long id);
 	
 }

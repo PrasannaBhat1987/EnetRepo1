@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Session;
 
 import com.pras.dao.BranchDao;
+import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
 import com.pras.dto.UserDto;
 import com.pras.dtohelper.BranchDtoHelper;
@@ -94,6 +95,16 @@ public class BranchDaoImpl implements BranchDao{
 		BranchDto dto = BranchDtoHelper.getDtoFromEntity(b);
 		dto.setId(id);
 		session.close();
+		return dto;
+	}
+
+	@Override
+	public BranchDetailsDto getBranchDetails(long id) {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		session.beginTransaction();
+		Branch b = (Branch) session.get(Branch.class, id);
+		BranchDetailsDto dto = BranchDtoHelper.getDetailsDtoFromEntity(b);
 		return dto;
 	}
 

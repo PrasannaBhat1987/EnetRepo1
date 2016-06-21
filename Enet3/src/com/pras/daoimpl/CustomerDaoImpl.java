@@ -7,7 +7,9 @@ import java.util.List;
 import org.hibernate.Session;
 
 import com.pras.dao.CustomerDao;
+import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
+import com.pras.dto.CustomerDetailsDto;
 import com.pras.dto.CustomerDto;
 import com.pras.dtohelper.BranchDtoHelper;
 import com.pras.dtohelper.CustomerDtoHelper;
@@ -86,6 +88,16 @@ public class CustomerDaoImpl implements CustomerDao {
 		c= (Customer) session.get(Customer.class, id);
 		CustomerDto dto = CustomerDtoHelper.getDtoFromEntity(c);
 		session.close();
+		return dto;
+	}
+
+	@Override
+	public CustomerDetailsDto getCustomerDetails(long id) {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		session.beginTransaction();
+		Customer c = (Customer) session.get(Customer.class, id);
+		CustomerDetailsDto dto = CustomerDtoHelper.getDetailsDtoFromEntity(c);
 		return dto;
 	}
 

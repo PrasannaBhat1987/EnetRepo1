@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import com.pras.counts.UserCount;
 import com.pras.dao.UserDao;
 import com.pras.daoimpl.UserDaoImpl;
+import com.pras.dto.UserDetailsDto;
 import com.pras.dto.UserDto;
 import com.pras.exception.ErrorInfo;
 import com.pras.model.User;
@@ -149,6 +150,21 @@ public class UserController {
 			ct.setManagers(dao.getUserType("Manager"));
 			ct.setReps(dao.getUserType("Representative"));
 			return Response.status(200).entity(ct).build();
+		}
+		return Response.status(400).entity("You are not authorized")
+				.build();
+	}
+	
+	@GET
+	@Path("/{id}/details")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDetails(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
+		UserDto user = new UserDto();
+		if (isValid(auth)) {
+			UserDao dao = new UserDaoImpl();
+			UserDetailsDto dto = new UserDetailsDto();
+			dto = dao.getUserDetails(id);
+			return Response.status(200).entity(dto).build();
 		}
 		return Response.status(400).entity("You are not authorized")
 				.build();

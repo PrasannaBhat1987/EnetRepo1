@@ -1,7 +1,14 @@
 package com.pras.dtohelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
+import com.pras.dto.RaoDto;
+import com.pras.dto.UserDto;
 import com.pras.model.Branch;
+import com.pras.model.Rao;
 
 public class BranchDtoHelper {
 
@@ -23,6 +30,26 @@ public class BranchDtoHelper {
 		if(b.getBranchmanager() != null) {
 			dto.setBranchmanagerId(b.getBranchmanager().getId());
 		}
+		return dto;
+	}
+
+	public static BranchDetailsDto getDetailsDtoFromEntity(Branch b) {
+		BranchDetailsDto dto = new BranchDetailsDto();
+		dto.setId(b.getId());
+		dto.setAddress(b.getAddress());
+		dto.setContact(b.getContact());
+		dto.setPincode(b.getPincode());
+		dto.setPlace(b.getPlace());
+		UserDto manager = UserDtoHelper.getDtoFromEntity(b.getBranchmanager());
+		dto.setBranchmanager(manager);
+		
+		List<Rao> raos = b.getRaos();
+		List<RaoDto> raoDtos = new ArrayList<RaoDto>();
+		for(Rao r : raos) {
+			raoDtos.add(RaoDtoHelper.getDtoFromEntity(r));
+		}
+		dto.setRaos(raoDtos);
+				
 		return dto;
 	}
 	

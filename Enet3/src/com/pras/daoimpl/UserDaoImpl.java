@@ -7,7 +7,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import com.pras.constant.Constants;
 import com.pras.dao.UserDao;
+import com.pras.dto.UserDetailsDto;
 import com.pras.dto.UserDto;
 import com.pras.dtohelper.UserDtoHelper;
 import com.pras.model.Branch;
@@ -31,8 +33,8 @@ public class UserDaoImpl implements UserDao {
 			return 1;
 		}
 			
-		u.setPassword("Password123");
-		u.setStatus("Created");
+		u.setPassword(Constants.DEFAULT_PASSWORD);
+		u.setStatus(Constants.CREATED);
 		//u.setManager((User) session.get(User.class, user.getManagerId()));
 		// Save the Model object
 		session.save(u);
@@ -54,7 +56,10 @@ public class UserDaoImpl implements UserDao {
 		u.setAddress(user.getAddress());
 		u.setName(user.getName());
 		u.setContact(user.getContact());
-		u.setManagerId(user.getManagerId());
+		if(user.getManagerId() != null) {
+			u.setManagerId(user.getManagerId());
+		}
+		
 		if(user.getNewPassword() != null) {
 			if (user.getPassword().equals(u.getPassword())) {
 				u.setPassword(user.getNewPassword());
@@ -98,7 +103,7 @@ public class UserDaoImpl implements UserDao {
 				.openSession();
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(User.class);
-		criteria.add(Restrictions.ne("status", "Deleted"));
+		criteria.add(Restrictions.ne("status", Constants.DELETED));
 		List<User> users = criteria.list();
 		//List<User> users = session.createCriteria(User.class).list();
 		List<UserDto> dtos = new ArrayList<UserDto>();
@@ -118,7 +123,7 @@ public class UserDaoImpl implements UserDao {
 		session.beginTransaction();
 		User user = (User) session.get(User.class, id);
 		
-		user.setStatus("Deleted");
+		user.setStatus(Constants.DELETED);
 		session.update(user);
 		//session.delete(user);
 		session.getTransaction().commit();
@@ -151,6 +156,22 @@ public class UserDaoImpl implements UserDao {
 		List results = cr.list();
 		session.close();
 		return results.size();
+	}
+
+
+	@Override
+	public UserDetailsDto getUserDetails(long id) {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		// start transaction
+		session.beginTransaction();
+		// Save the Model object
+		User user = (User) session.get(User.class, id);
+		User manager = (User) session.get(User.class, user.getManagerId());
+		
+		UserDetailsDto dto = UserDtoHelper.getDetailsDtoFromEntity(user, manager);
+		session.close();
+		return dto;
 	}
 
 }

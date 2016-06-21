@@ -19,6 +19,7 @@ import com.pras.dao.BranchDao;
 import com.pras.dao.UserDao;
 import com.pras.daoimpl.BranchDaoImpl;
 import com.pras.daoimpl.UserDaoImpl;
+import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
 import com.pras.dto.UserDto;
 import com.pras.model.Branch;
@@ -110,6 +111,22 @@ public class BranchController {
 		BranchDto dto = new BranchDto();
 		if (isValid(auth)) {
 			dto = dao.getBranch(id);
+			return Response.status(200).entity(dto).build();
+		}
+		
+		return Response.status(400).entity("You are not authorized")
+				.build();
+	}
+	
+	@GET
+	@Path("/{id}/details")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDetails(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
+
+		BranchDao dao = new BranchDaoImpl();
+		BranchDetailsDto dto = new BranchDetailsDto();
+		if (isValid(auth)) {
+			dto = dao.getBranchDetails(id);
 			return Response.status(200).entity(dto).build();
 		}
 		

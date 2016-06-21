@@ -20,6 +20,7 @@ import com.pras.dao.CustomerDao;
 import com.pras.daoimpl.BranchDaoImpl;
 import com.pras.daoimpl.CustomerDaoImpl;
 import com.pras.dto.BranchDto;
+import com.pras.dto.CustomerDetailsDto;
 import com.pras.dto.CustomerDto;
 import com.pras.dto.LoginDto;
 import com.pras.exception.ErrorInfo;
@@ -120,6 +121,23 @@ public class CustomerController {
 				return Response.status(500).entity(info).build();
 			}
 			
+			return Response.status(200).entity(dto).build();
+		}
+		
+		return Response.status(400).entity("You are not authorized")
+				.build();
+	}
+	
+	@GET
+	@Path("/{id}/details")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDetails(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
+
+		CustomerDao dao = new CustomerDaoImpl();
+		CustomerDetailsDto dto = new CustomerDetailsDto();
+		if (isValid(auth)) {
+			
+			dto = dao.getCustomerDetails(id);
 			return Response.status(200).entity(dto).build();
 		}
 		

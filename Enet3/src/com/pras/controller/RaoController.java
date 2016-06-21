@@ -76,11 +76,11 @@ public class RaoController {
 	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@HeaderParam("Auth") String auth,
-			@PathParam("id") long id) {
+			@PathParam("id") long id, RaoDto rao) {
 
 		if (isValid(auth)) {
 			RaoDao dao = new RaoDaoImpl();
-			dao.editRao(id, null);
+			dao.editRao(id, rao);
 			return Response.status(200)
 					.entity("This rao is removed successfully").build();
 		} else {
@@ -98,7 +98,7 @@ public class RaoController {
 			RaoDao dao = new RaoDaoImpl();
 			RaoCount ct = new RaoCount();
 			ct.setCompleted(dao.getRaoType("Completed"));
-			ct.setCreated(dao.getRaoType("Created"));
+			ct.setCreated(dao.getRaoType("New"));
 			ct.setInProgress(dao.getRaoType("In Progress"));
 			return Response.status(200).entity(ct).build();
 		}

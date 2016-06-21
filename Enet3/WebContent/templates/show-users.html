@@ -20,8 +20,9 @@
             </tr>
         </thead>
     </table>
-    <button id="deleteuser" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteUser()">Delete Selected</button>
+    <button id="deleteuser" class="btn btn-primary col-sm-2 col-sm-offset-2" ng-click="deleteUser()">Delete Selected</button>
     <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editUser();assignbranch=false" data-toggle="modal" data-target="#userModal">Edit Selected</button>
+	<button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="getUserDetails()" data-toggle="modal" data-target="#userDetailsModal">View Details</button>
 </div>
 
 <div ng-show="isSelected(2)">
@@ -151,3 +152,120 @@
         </div>
     </div>
 </div> 
+
+<div class="modal fade" id="userDetailsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">User Details</h4>
+            </div>
+            <!-- Modal Body -->
+            <div class="col-sm-6">
+	           	<table class="table table-hover">
+				    <tbody>
+				      <tr>
+				        <td>ID</td>
+				        <td>{{id}}</td>
+				      </tr>
+				      <tr>
+				        <td>Name</td>
+				        <td>{{name}}</td>
+				      </tr>
+				      <tr>
+				        <td>Email</td>
+				        <td>{{email}}</td>
+				      </tr>
+				      <tr>
+				        <td>Contact</td>
+				        <td>{{contact}}</td>
+				      </tr>
+				      <tr>
+				        <td>Address</td>
+				        <td>{{address}}</td>
+				      </tr>
+				      <tr>
+				        <td>Role</td>
+				        <td>{{role}}</td>
+				      </tr>
+				    </tbody>
+				  </table>
+                </div>
+                <div class="col-sm-12">
+                	<h4>Manager Details</h4>
+                	<table class="table table-hover">
+				    <tbody>
+				      <tr>
+				        <td>Name</td>
+				        <td>{{managerName}}</td>
+				      </tr>
+				      <tr>
+				        <td>Email</td>
+				        <td>{{managerEmail}}</td>
+				      </tr>
+				      <tr>
+				        <td>Contact</td>
+				        <td>{{managerContact}}</td>
+				      </tr>
+				      <tr>
+				        <td>Address</td>
+				        <td>{{managerAddress}}</td>
+				      </tr>
+				    </tbody>
+				  </table>
+                </div>
+                
+                <div class="col-sm-12">
+                	<h4>Branch Details</h4>
+                	<table class="table table-hover">
+				    <tbody>
+				      <tr>
+				        <td>Place</td>
+				        <td>{{branchPlace}}</td>
+				      </tr>
+				      <tr>
+				        <td>Pincode</td>
+				        <td>{{branchPincode}}</td>
+				      </tr>
+				      <tr>
+				        <td>Contact</td>
+				        <td>{{branchContact}}</td>
+				      </tr>
+				      <tr>
+				        <td>Address</td>
+				        <td>{{branchAddress}}</td>
+				      </tr>
+				    </tbody>
+				  </table>
+                </div>
+                <div class="col-sm-12">
+                	<h4>Rao Details</h4>
+                	<table class="table table-hover">
+	                	<thead>
+					      <tr>
+					        <th>ID</th>
+					        <th>Order Number</th>
+					        <th>Website ID</th>
+					        <th>Customer ID</th>
+					        <th>Total Amount</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					      <tr ng-repeat="rao in raos">
+					        <td>{{rao.id}}</td>
+					        <td>{{rao.orderNumber}}</td>
+					        <td>{{rao.websiteId}}</td>
+					        <td>{{rao.customerId}}</td>
+					        <td>{{rao.total}}</td>
+					      </tr>
+					    </tbody>
+				  </table>
+                </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

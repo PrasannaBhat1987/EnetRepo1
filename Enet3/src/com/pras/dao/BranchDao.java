@@ -2,6 +2,7 @@ package com.pras.dao;
 
 import java.util.Collection;
 
+import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
 import com.pras.model.Branch;
 
@@ -12,5 +13,6 @@ public interface BranchDao {
 	public void editBranch(long id, BranchDto branch);
 	public Collection<? extends BranchDto> getBranches();
 	public BranchDto getBranch(long id);
+	public BranchDetailsDto getBranchDetails(long id);
 	
 }
