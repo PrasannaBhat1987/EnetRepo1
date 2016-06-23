@@ -17,8 +17,9 @@
             </tr>
         </thead>
     </table>
-    <button id="deletewebsite" class="btn btn-primary col-sm-2 col-sm-offset-4" ng-click="deleteWebsite()">Delete Selected</button>
+    <button id="deletewebsite" class="btn btn-primary col-sm-2 col-sm-offset-2" ng-click="deleteWebsite()">Delete Selected</button>
     <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editWebsite()" data-toggle="modal" data-target="#myModal">Edit Selected</button>
+    <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="getWebsiteDetails()" data-toggle="modal" data-target="#websiteDetailsModal">Details</button>
 </div>
 
 
@@ -56,6 +57,52 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
                 <button type="button" class="btn btn-primary" ng-click="updateWebsite()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="websiteDetailsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Website Details - {{websitename}}</h4>
+            </div>
+            <!-- Modal Body -->
+                
+                <div class="col-sm-12">
+                	<h4>Rao Details</h4>
+                	<table class="table table-hover">
+	                	<thead>
+					      <tr>
+					        <th>ID</th>
+					        <th>Order#</th>
+					        <th>Website#</th>
+					        <th>Customer#</th>
+					        <th>User#</th>
+					        <th>Date</th>
+					        <th>Amount</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					      <tr ng-repeat="rao in raos">
+					        <td>{{rao.id}}</td>
+					        <td>{{rao.orderNumber}}</td>
+					        <td>{{rao.websiteId}}</td>
+					        <td>{{rao.customerId}}</td>
+					        <td>{{rao.userId}}</td>
+					        <td>{{rao.orderDate | date:'dd-MM-yyyy'}}</td>
+					        <td>{{rao.total}}</td>
+					      </tr>
+					    </tbody>
+				  </table>
+                </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
             </div>
         </div>
     </div>

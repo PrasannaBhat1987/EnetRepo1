@@ -6,7 +6,10 @@ import java.util.List;
 import org.hibernate.Session;
 
 import com.pras.dao.WebsiteDao;
+import com.pras.dto.CustomerDetailsDto;
+import com.pras.dto.WebsiteDetailsDto;
 import com.pras.dto.WebsiteDto;
+import com.pras.dtohelper.CustomerDtoHelper;
 import com.pras.dtohelper.WebsiteDtoHelper;
 import com.pras.model.Branch;
 import com.pras.model.Website;
@@ -64,6 +67,16 @@ public class WebsiteDaoImpl implements WebsiteDao {
 		w.setName(website.getName());
 		session.saveOrUpdate(w);
 		session.getTransaction().commit();
+	}
+
+	@Override
+	public WebsiteDetailsDto getWebsiteDetails(long id) {
+		Session session = HibernateUtil.getSessionAnnotationFactory()
+				.openSession();
+		session.beginTransaction();
+		Website w = (Website) session.get(Website.class, id);
+		WebsiteDetailsDto dto = WebsiteDtoHelper.getDetailsDtoFromEntity(w);
+		return dto;
 	}
 
 }

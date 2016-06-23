@@ -3,6 +3,7 @@ package com.pras.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pras.constant.Constants;
 import com.pras.model.User;
 
 public class AuthUtil {
@@ -30,5 +31,23 @@ public class AuthUtil {
 	
 	public static void logoutUser(String key) {
 		getInstance().authMap.remove(key);
+	}
+	
+	public static boolean isValid(String auth) {
+		User user = getLoggedInUser(auth);
+		if(user != null) {
+			if(user.getRole().equals(Constants.REP)) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isValidForAll(String auth) {
+		if(getLoggedInUser(auth) != null) {
+			return true;
+		}
+		return false;
 	}
 }

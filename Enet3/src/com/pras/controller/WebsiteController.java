@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import com.pras.dao.WebsiteDao;
 import com.pras.daoimpl.WebsiteDaoImpl;
+import com.pras.dto.WebsiteDetailsDto;
 import com.pras.dto.WebsiteDto;
 import com.pras.model.Order;
 import com.pras.model.Website;
@@ -92,6 +93,22 @@ public class WebsiteController {
 
 	}
 	
+	@GET
+	@Path("/{id}/details")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getWebsiteDetails(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
+
+		if (isValid(auth)) {
+			WebsiteDao dao = new WebsiteDaoImpl();
+			WebsiteDetailsDto website = dao.getWebsiteDetails(id);
+			return Response.status(200)
+					.entity(website).build();
+		} else {
+			return Response.status(400).entity("You are not authorized")
+					.build();
+		}
+
+	}
 	
 	private boolean isValid(String auth) {
 		// TODO Auto-generated method stub

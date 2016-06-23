@@ -83,11 +83,13 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	$scope.getUserDetails = function() {
 		$http.get('http://localhost:8083/Enet3/rest/representative/'+$scope.id+'/details').success( function(response) {
 		      var manager = response.manager;
-		      $scope.managerName = manager.name;
-		      $scope.managerEmail = manager.email;
-		      $scope.managerContact = manager.contact;
-		      $scope.managerAddress = manager.address;
-		      
+		      if(manager) {
+		    	  $scope.managerName = manager.name;
+			      $scope.managerEmail = manager.email;
+			      $scope.managerContact = manager.contact;
+			      $scope.managerAddress = manager.address;
+		      }
+		     
 		      var branch = response.branch;
 		      if(branch) {
 		    	  $scope.branchPlace = branch.place;
@@ -170,8 +172,11 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	        .success(function (data, status, headers) {
 	        	table.row('.selected').remove().draw( false );
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function(errorInfo){
+	        	jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+	    	});
     });
 	
 	
@@ -191,8 +196,13 @@ sampleApp.controller('ShowUsersController', function($scope, $http, $cookies, $r
 	        	jq('#modalClose').click();
 	        	$scope.showUsers();
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function(errorInfo){
+	        	alert(errorInfo.message);
+//	        	jq('#modalClose').click();
+//	    		jq('#error').click();
+//				$scope.errorCode = errorInfo.status;
+//				$scope.errorMessage = errorInfo.message;
+	    	});
 	};
 	
 	$scope.assignBranchToUser = function() {
@@ -597,6 +607,7 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
 		return $scope.tab === checkTab;
 	}
 	$http.defaults.headers.common['Auth'] = $cookies.Auth;
+	
 	$scope.createWebsite = function() {
 		$http.post('http://localhost:8083/Enet3/rest/website/add',{
     		"name" : $scope.websitename,
@@ -605,6 +616,13 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
     		$scope.message = 'Website added !!'; 
     	});
 	};
+	
+	$scope.getWebsiteDetails = function() {
+		$http.get('http://localhost:8083/Enet3/rest/website/'+ $scope.websiteid + '/details').success( function(response) {
+		      $scope.raos = response.raos; 
+		});
+	}
+	
 	$scope.showWebsites = function() {
 		
 		$http.get('http://localhost:8083/Enet3/rest/website/all').success( function(response) {
@@ -723,6 +741,10 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 	    		$scope.contact = '';
 	    		$scope.managerid = '';
 	    		$scope.message = 'Branch added !!'; 
+	    	}).error(function(errorInfo){
+	    		jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
 	    	});
 	 };
 	 
@@ -762,8 +784,13 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 		        	jq('#modalClose').click();
 		        	$scope.showBranches();
 		        })
-		        .error(function (data, status, header, config) {
-		        });
+		        .error(function(errorInfo){
+		        	alert(errorInfo.message);
+//		        	jq('#modalClose').click();
+//		    		jq('#error').click();
+//					$scope.errorCode = errorInfo.status;
+//					$scope.errorMessage = errorInfo.message;
+		    	});
 	 };
 		
 		$scope.showBranches = function() {
@@ -816,8 +843,11 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 		    		$scope.contact = '';
 		    		$scope.managerid = '';
 		        })
-		        .error(function (data, status, header, config) {
-		        });
+		        .error(function(errorInfo){
+		    		jq('#error').click();
+					$scope.errorCode = errorInfo.status;
+					$scope.errorMessage = errorInfo.message;
+		    	});
 	    });
 	 
 });
@@ -839,6 +869,8 @@ sampleApp.controller('EditProfileController',function($scope, $http, $cookies, $
 	$scope.canShow = function(){
 		return $scope.newPassword !== $scope.confirmPassword;
 	};
+	
+	$http.defaults.headers.common['Auth'] = $cookies.Auth;
 	
 	$scope.editProfile = function() {
 			$http.put('http://localhost:8083/Enet3/rest/representative/' + $cookies.userId, {
@@ -877,6 +909,7 @@ sampleApp.controller('EditProfileController',function($scope, $http, $cookies, $
 
 sampleApp.controller('DashboardController',function($scope, $http, $cookies, $window) {
 	
+	$http.defaults.headers.common['Auth'] = $cookies.Auth;
 	
 	$http.get('http://localhost:8083/Enet3/rest/representative/getNumbers').success( function(response) {
 	      $scope.numbers = response; 
@@ -928,6 +961,9 @@ sampleApp.controller('ShowRaoController',function($scope, $window, $http, $cooki
     var table;
     selectedRaoId = null;
     
+    var options = {
+    	   year: "numeric", month: "short",  day: "numeric"
+    	};
     
     
     $scope.showRaos = function() {
@@ -942,7 +978,7 @@ sampleApp.controller('ShowRaoController',function($scope, $window, $http, $cooki
 	  		            { "data": "orderNumber" },
 	  		            { "data": "orderDate", 
 	  		            	"render": function (data) {
-	  		                    return new Date(data);
+	  		                    return new Date(data).toLocaleDateString("en-US", options);
 	  		                }
 	  		            },
 	  		            { "data": "status" },

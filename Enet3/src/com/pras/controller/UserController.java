@@ -29,12 +29,13 @@ import com.pras.util.AuthUtil;
 @Path("/representative")
 public class UserController {
 
+	ErrorInfo info = new ErrorInfo(); 
+	
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("/add")
     public Response add(@HeaderParam("Auth") String auth, UserDto user){
-		ErrorInfo info = new ErrorInfo(); 
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
 			int returnCode = dao.addUser(user);
 			if(returnCode == 1) {
@@ -47,34 +48,22 @@ public class UserController {
 					.entity("This user is added successfully").build();
 			}
 		} else {
-			info.setStatus(400);
-			info.setMessage("You are not authorized");
-			return Response.status(200)
-					.entity(info).build();
+			return getErrorInfo();
 		}
     }
-	
-	private boolean isValid(String auth) {
-		// TODO Auto-generated method stub
-		if(AuthUtil.getLoggedInUser(auth) != null) {
-			return true;
-		}
-		return true;
-	}
 	
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@HeaderParam("Auth") String auth,
 			@PathParam("id") long id) {
 
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth)) {
 			UserDao dao = new UserDaoImpl();
 			dao.removeUserById(id);
 			return Response.status(200)
 					.entity("This user is removed successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -86,7 +75,7 @@ public class UserController {
 			UserDto dto) {
 
 		System.out.println("Received User is :" + dto.getName());
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth) || (AuthUtil.getLoggedInUser(auth).getId() == id)) {
 			UserDao dao = new UserDaoImpl();
 			int returnVal = dao.editUser(id, dto);
 			if(returnVal == 1) {
@@ -98,8 +87,7 @@ public class UserController {
 			}
 			
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -109,7 +97,7 @@ public class UserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
 		UserDto user = new UserDto();
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			UserDao dao = new UserDaoImpl();
 			try {
 				user = dao.getUser(id);
@@ -120,8 +108,7 @@ public class UserController {
 			
 			return Response.status(200).entity(user).build();
 		}
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 	}
 	
 	@GET
@@ -130,20 +117,19 @@ public class UserController {
 	public Response getUsers(@HeaderParam("Auth") String auth) {
 		UserDao dao = new UserDaoImpl();
 		List<UserDto> list = new ArrayList<UserDto>();
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			list.addAll(dao.getUsers());
 			return Response.status(200).entity(list).build();
 		}
 		
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 	}
 	
 	@GET
 	@Path("/getNumbers")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getNumbers(@HeaderParam("Auth") String auth) {
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			UserDao dao = new UserDaoImpl();
 			UserCount ct = new UserCount();
 			ct.setAdmins(dao.getUserType("Admin"));
@@ -151,8 +137,7 @@ public class UserController {
 			ct.setReps(dao.getUserType("Representative"));
 			return Response.status(200).entity(ct).build();
 		}
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 	}
 	
 	@GET
@@ -160,13 +145,19 @@ public class UserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDetails(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
 		UserDto user = new UserDto();
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			UserDao dao = new UserDaoImpl();
 			UserDetailsDto dto = new UserDetailsDto();
 			dto = dao.getUserDetails(id);
 			return Response.status(200).entity(dto).build();
 		}
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
+	}
+	
+	private Response getErrorInfo() {
+		info.setStatus(400);
+		info.setMessage("You are not authorized to perform this action");
+		return Response.status(500)
+				.entity(info).build();
 	}
 }
