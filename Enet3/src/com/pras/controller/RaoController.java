@@ -1,5 +1,6 @@
 package com.pras.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import com.pras.counts.RaoCount;
 import com.pras.counts.UserCount;
@@ -26,11 +28,14 @@ import com.pras.daoimpl.UserDaoImpl;
 import com.pras.dto.BranchDto;
 import com.pras.dto.RaoDto;
 import com.pras.model.Rao;
+import com.pras.pdf.PdfUtil;
 import com.pras.util.AuthUtil;
 
 @Path("/rao")
 public class RaoController {
 
+	private static final String FILE_PATH = "D:/temp/";
+	
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("/add")
@@ -132,6 +137,29 @@ public class RaoController {
 		if (isValid(auth)) {
 			dto = dao.getRao(id);
 			return Response.status(200).entity(dto).build();
+		}
+		
+		return Response.status(400).entity("You are not authorized")
+				.build();
+	}
+	
+	@GET
+	@Path("/{id}/print")
+	@Produces("application/pdf")
+	public Response getPrintPdf(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
+
+		
+		
+		RaoDao dao = new RaoDaoImpl();
+		if (isValid(auth)) {
+			
+			Rao rao = dao.getRaoEntity(id);
+			File file = new File(FILE_PATH + id + ".pdf");
+			PdfUtil.createPdf(rao);
+			ResponseBuilder response = Response.ok((Object) file);
+			response.header("Content-Disposition",
+					"attachment; filename=" + file.getName());
+			return response.build();
 		}
 		
 		return Response.status(400).entity("You are not authorized")

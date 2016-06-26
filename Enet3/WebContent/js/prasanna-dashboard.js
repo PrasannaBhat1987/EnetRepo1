@@ -300,7 +300,9 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		});
 	}
 	
-	
+	$scope.printRao = function() {
+		$window.location.href = 'http://localhost:8083/Enet3/rest/rao/' + $scope.raoid + '/print';
+	}
 	
 	$scope.getWebsiteName = function() {
 		angular.forEach($scope.websites, function(website, index){

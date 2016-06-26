@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -122,7 +123,7 @@ public class RaoDaoImpl implements RaoDao{
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		Criteria cr = session.createCriteria(Rao.class);
-		cr.add(Restrictions.eq("status", status));
+		cr.add(Restrictions.eq("status", status)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY) ;
 		List results = cr.list();
 		session.close();
 		return results.size();
@@ -132,13 +133,26 @@ public class RaoDaoImpl implements RaoDao{
 	public Collection<? extends RaoDto> getAllRaos() {
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
-		Criteria cr = session.createCriteria(Rao.class);
-		List<Rao> results = cr.list();
+		//Criteria cr = session.createCriteria(Rao.class);
+		//List<Rao> results = cr.list();
+		String hql = "FROM Rao";
+		Query query = session.createQuery(hql);
+		List<Rao> results = query.list();
 		List<RaoDto> dtos = new ArrayList<RaoDto>();
 		for (int i=0;i<results.size();i++) {
 			dtos.add(RaoDtoHelper.getDtoFromEntity(results.get(i)));
 		}
 		session.close();
 		return dtos;
+	}
+
+	@Override
+	public Rao getRaoEntity(long id) {
+		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
+        //start transaction
+        session.beginTransaction();
+        Rao rao = (Rao) session.get(Rao.class, id);
+        session.close();
+        return rao;
 	}
 }

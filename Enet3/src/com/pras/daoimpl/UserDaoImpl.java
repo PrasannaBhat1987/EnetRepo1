@@ -134,6 +134,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User getUserByEmail(String email) {
 		// TODO Auto-generated method stub
+		HibernateUtil.clearSessionFactory();
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		Criteria cr = session.createCriteria(User.class);

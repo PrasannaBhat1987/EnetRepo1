@@ -15,5 +15,6 @@ public interface RaoDao {
 	public RaoDto getRao(long id);
 	public int getRaoType(String string);
 	public Collection<? extends RaoDto> getAllRaos();
+	public Rao getRaoEntity(long id);
 	
 }

@@ -62,7 +62,7 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
- 
+    
     private static SessionFactory buildSessionJavaConfigFactory() {
         try {
         Configuration configuration = new Configuration();
@@ -104,10 +104,13 @@ public class HibernateUtil {
         if(sessionAnnotationFactory == null) sessionAnnotationFactory = buildSessionAnnotationFactory();
         return sessionAnnotationFactory;
     }
-     
+    
     public static SessionFactory getSessionJavaConfigFactory() {
         if(sessionJavaConfigFactory == null) sessionJavaConfigFactory = buildSessionJavaConfigFactory();
         return sessionJavaConfigFactory;
     }
-     
+    
+    public static void clearSessionFactory() {
+    	sessionAnnotationFactory = null;
+    }
 }

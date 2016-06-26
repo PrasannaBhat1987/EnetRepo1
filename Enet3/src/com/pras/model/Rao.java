@@ -25,22 +25,22 @@ public class Rao implements Serializable{
 	private long id;
 	private String description;
 	
-	@OneToMany(mappedBy="rao", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="rao", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<LineItem> items;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="website_id")
 	private Website website;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="customer_id")
 	private Customer customer;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="branch_id")
 	private Branch branch;
 	
-	@ManyToOne
+	@ManyToOne (fetch=FetchType.EAGER)
     @JoinColumn(name="user_id")
 	private User user;
 	
