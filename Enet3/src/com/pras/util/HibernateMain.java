@@ -3,14 +3,20 @@ package com.pras.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 
+import com.pras.constant.Constants;
+import com.pras.controller.SetupController;
 import com.pras.model.Branch;
 import com.pras.model.User;
 import com.pras.model.Website;
 
 public class HibernateMain {
 
+	final static Logger logger = Logger.getLogger(HibernateMain.class);
+	
 	public static void main(String[] args) {
 		
 		Session session = HibernateUtil.getSessionAnnotationFactory().getCurrentSession();
@@ -90,10 +96,21 @@ public class HibernateMain {
         HibernateUtil.getSessionAnnotationFactory().close();
 	}
 	
-	public static void init() {
+	public static void init() throws Exception {
+		logger.debug("[HibernateMain] init started");
 		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
 		//start transaction
         session.beginTransaction();
+        
+        Criteria c = session.createCriteria(User.class);
+        List<User> users = c.list();
+        if (users.size() > 0) {
+        	return;
+        }
+        
+        Criteria w = session.createCriteria(Website.class);
+        List<User> sites = w.list();
+        
         
 		Website website1 = new Website();
 		website1.setName("Flipkart");
@@ -116,6 +133,7 @@ public class HibernateMain {
 		user1.setEmail("pras.jnnce@gmail.com");
 		user1.setPassword("bhat");
 		user1.setRole("Admin");
+		user1.setStatus(Constants.CREATED);
 		
 		
 			
@@ -145,6 +163,7 @@ public class HibernateMain {
         
         //terminate session factory, otherwise program won't end
         HibernateUtil.getSessionAnnotationFactory().close();
+        logger.debug("[HibernateMain] init ended");
 	}
 
 }

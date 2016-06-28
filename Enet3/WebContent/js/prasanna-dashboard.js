@@ -230,24 +230,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.customerid='';
 	$scope.branchId='';
 	$scope.serviceCharge = 200;
-	$scope.lineItems = [{
-		"item" : "Television",
-		"itemDescription" : "Item1",
-		"quantity" : 3,
-		"unitPrice" : 40
-	},
-	{
-		"item" : "Refrigeratorr",
-		"itemDescription" : "Item2",
-		"quantity" : 10,
-		"unitPrice" : 120
-	},
-	{
-		"item" : "Washing Machine",
-		"itemDescription" : "Item3",
-		"quantity" : 5,
-		"unitPrice" : 1200
-	}];
+	$scope.lineItems = [];
 	$scope.itemDescription='';
 	$scope.item='';
 	$scope.quantity = '';
@@ -275,6 +258,9 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	      $scope.branches = response; 
 	});
 	
+	$scope.removeItem = function(index) {
+		 $scope.lineItems.splice(index,1); 
+	}
 	if(selectedRaoId) {
 		$http.get('http://localhost:8083/Enet3/rest/rao/' + selectedRaoId).success( function(response) {
 			$scope.websiteId = response.websiteId;

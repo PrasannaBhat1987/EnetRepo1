@@ -9,6 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
+
 import com.pras.dto.LoginDto;
 import com.pras.dto.LoginResponseDto;
 import com.pras.exception.ErrorInfo;
@@ -21,6 +23,8 @@ import com.sun.jersey.core.util.Base64;
 @Path("/user")
 public class LoginController {
 
+	final static Logger logger = Logger.getLogger(LoginController.class);
+	
 	User u;
 	
 	@POST
@@ -43,6 +47,8 @@ public class LoginController {
         byte[] valueDecoded= Base64.decode(bytesEncoded);
         System.out.println("Decoded value is " + new String(valueDecoded));
         System.out.println(new String(Base64.decode(Auth)));
+        
+        logger.debug("[LoginController]: username : " + cred.getUsername());
         
         if(ifValid(cred, Auth)) {
         	LoginResponseDto dto = new LoginResponseDto();
