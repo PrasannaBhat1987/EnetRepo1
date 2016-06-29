@@ -17,7 +17,7 @@
 	  	<hr>
 	  	<div class="form-group">
 			<label for="customerid">Customer ID:</label> 
-			<input type="text" class="form-control" id="customerid" ng-model="customerid">
+			<input type="text" class="form-control" id="customerid" ng-model="customerid" required>
 		</div>
 		<div class="form-group">
 			<button id="fetchCustomer" class="btn btn-primary center-block" ng-click="fetchCustomer()">Fetch Customer</button>
@@ -55,7 +55,7 @@
 	  	<hr>
 	  	<div class="form-group">
 			<label for="branchDetails">Branch Details:</label>
-			<select class="form-control" ng-model="branchId" data-ng-options="a.id as a.place for a in branches">
+			<select class="form-control" ng-model="branchId" data-ng-options="a.id as a.place for a in branches" required>
 			</select>
 		</div>
 	  </div>
@@ -130,7 +130,7 @@
 	  	<hr>
 	  	<div class="form-group">
 			<label for="representativeid">Representative ID:</label> 
-			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid">
+			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid" required>
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary center-block" ng-click="fetchRepresentative()">Fetch Representative</button>
@@ -154,12 +154,12 @@
 	  	<hr>
 		<div class="form-group">
 			<label for="bookedWebsite">Booked website:</label>
-			<select class="form-control" ng-model="websiteId" data-ng-options="a.id as a.name for a in websites">
+			<select class="form-control" ng-model="websiteId" data-ng-options="a.id as a.name for a in websites" required>
 			</select>
 		</div>
 		<div class="form-group">
 			<label for="orderNumber">Order Number:</label> 
-			<input type="text" class="form-control" id="orderNumber" ng-model="orderNumber">
+			<input type="text" class="form-control" id="orderNumber" ng-model="orderNumber" required>
 		</div>
 		<div class="form-group">
 			<label for="description">Additional Information (If Any):</label>
@@ -167,7 +167,7 @@
 		</div>
 		<div class="form-group">
 			<label for="role">Status:</label> 
-			<select class="form-control selectpicker" id="role" ng-model="status">
+			<select class="form-control selectpicker" id="role" ng-model="status" required>
 			    <option>New</option>
 			    <option>In Progress</option>
 			    <option>Completed</option>
@@ -178,7 +178,7 @@
 	  <div ng-show="isSelected(6)">
 	  	<hr>
 	  	<div class="row cust">
-	  		<button type="submit" class="btn btn-primary col-sm-1 col-sm-offset-10" ng-click="createRao()" ng-disabled="disableConfirm">Confirm</button>
+	  		<button type="submit" class="btn btn-primary col-sm-1 col-sm-offset-10" ng-click="createRao(myform.$valid)" ng-disabled="disableConfirm">Confirm</button>
 	  		<button class="btn btn-primary col-sm-1" ng-click="printRao()">Print</button>
 	  	</div>
 	  	<div class="row cust">
@@ -301,7 +301,7 @@
 		  	</div>
 		 </div>
 		 <div class="row">
-		 	<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao()" ng-disabled="disableConfirm">Confirm</button>
+		 	<button type="submit" class="btn btn-primary col-sm-4 col-sm-offset-4" ng-click="createRao(myform.$valid)" ng-disabled="disableConfirm">Confirm</button>
 		 </div>
 	  	
 	  </div>

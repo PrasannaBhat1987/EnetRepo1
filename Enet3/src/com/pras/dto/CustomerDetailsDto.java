@@ -10,6 +10,8 @@ public class CustomerDetailsDto {
 	private String contact;
 	private String address;
 	private List<RaoDto> raos;
+	private String status;
+	
 	public long getId() {
 		return id;
 	}
@@ -45,5 +47,11 @@ public class CustomerDetailsDto {
 	}
 	public void setRaos(List<RaoDto> raos) {
 		this.raos = raos;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

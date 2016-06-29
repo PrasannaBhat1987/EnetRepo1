@@ -24,6 +24,7 @@ public class Branch implements Serializable {
 	private String address;
 	private long pincode;
 	private String contact;
+	private String status;
 	
 	@ManyToOne
     @JoinColumn(name="manager_id", nullable= true)
@@ -97,6 +98,14 @@ public class Branch implements Serializable {
 
 	public void setRaos(List<Rao> raos) {
 		this.raos = raos;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

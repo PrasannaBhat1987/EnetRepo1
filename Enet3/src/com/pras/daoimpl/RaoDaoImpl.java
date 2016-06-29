@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import com.pras.constant.Constants;
 import com.pras.dao.RaoDao;
 import com.pras.dto.BranchDto;
 import com.pras.dto.LineItemDto;
@@ -34,8 +35,9 @@ public class RaoDaoImpl implements RaoDao{
         //start transaction
         session.beginTransaction();
         Rao rao = (Rao) session.get(Rao.class, id);
+        rao.setStatus(Constants.DELETED);
         //Save the Model object
-        session.delete(rao);
+        session.saveOrUpdate(rao);
         session.getTransaction().commit();
         session.close();
 	}
@@ -67,7 +69,9 @@ public class RaoDaoImpl implements RaoDao{
 		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
-        List<Rao> raos = session.createCriteria(Rao.class).list();
+        Criteria cr = session.createCriteria(Rao.class);
+		cr.add(Restrictions.ne("status", Constants.DELETED)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Rao> raos = cr.list();
 		List<RaoDto> dtos = new ArrayList<RaoDto>();
 		RaoDto dto = null;
 		for(int i=0;i<raos.size();i++) {
@@ -113,6 +117,7 @@ public class RaoDaoImpl implements RaoDao{
         	it.add(lt);
         }
         rao.setItems(it);
+        rao.setStatus(dto.getStatus());
         session.persist(rao);
         session.getTransaction().commit();
         return (int) rao.getId();
@@ -123,7 +128,7 @@ public class RaoDaoImpl implements RaoDao{
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		Criteria cr = session.createCriteria(Rao.class);
-		cr.add(Restrictions.eq("status", status)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY) ;
+		cr.add(Restrictions.eq("status", status)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List results = cr.list();
 		session.close();
 		return results.size();
@@ -135,9 +140,12 @@ public class RaoDaoImpl implements RaoDao{
 				.openSession();
 		//Criteria cr = session.createCriteria(Rao.class);
 		//List<Rao> results = cr.list();
-		String hql = "FROM Rao";
-		Query query = session.createQuery(hql);
-		List<Rao> results = query.list();
+//		String hql = "FROM Rao";
+//		Query query = session.createQuery(hql);
+		Criteria cr = session.createCriteria(Rao.class);
+		cr.add(Restrictions.ne("status", Constants.DELETED)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<Rao> results = cr.list();
+		//List<Rao> results = query.list();
 		List<RaoDto> dtos = new ArrayList<RaoDto>();
 		for (int i=0;i<results.size();i++) {
 			dtos.add(RaoDtoHelper.getDtoFromEntity(results.get(i)));

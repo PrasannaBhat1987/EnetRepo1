@@ -44,6 +44,7 @@ public class HibernateMain {
 		user1.setEmail("p@s.com");
 		user1.setPassword("bhat");
 		user1.setRole("Admin");
+		user1.setStatus("Created");
 		
 		
 		User user2 = new User();
@@ -54,6 +55,7 @@ public class HibernateMain {
 		user2.setPassword("prabhat");
 		user2.setManagerId(user1.getId());
 		user2.setRole("Manager");
+		user2.setStatus("Created");
 		
 		User user3 = new User();
 		user3.setName("Naveen");
@@ -63,6 +65,7 @@ public class HibernateMain {
 		user3.setPassword("naveen");
 		user3.setManagerId(user1.getId());
 		user3.setRole("Representative");
+		user3.setStatus("Created");
 		
 		
 		session.save(user1);
@@ -74,6 +77,7 @@ public class HibernateMain {
 		branch1.setAddress("Shiralkoppa Address");
 		branch1.setContact("COntactSlkp");
 		branch1.setPincode(111111);
+		branch1.setStatus("Created");
 		
 		branch1.setBranchmanager(user1);
 		
@@ -114,12 +118,16 @@ public class HibernateMain {
         
 		Website website1 = new Website();
 		website1.setName("Flipkart");
+		website1.setStatus("Created");
 		Website website2 = new Website();
 		website2.setName("SnapDeal");
+		website2.setStatus("Created");
 		Website website3 = new Website();
 		website3.setName("Amazon");
+		website3.setStatus("Created");
 		Website website4 = new Website();
 		website4.setName("Shopclues");
+		website4.setStatus("Created");
 		
 		session.save(website1);
 		session.save(website2);
@@ -145,7 +153,7 @@ public class HibernateMain {
 		branch1.setAddress("Shiralkoppa Address");
 		branch1.setContact("9743101916");
 		branch1.setPincode(581472);
-		
+		branch1.setStatus(Constants.CREATED);
 		branch1.setBranchmanager(user1);
 		
 		session.save(branch1);

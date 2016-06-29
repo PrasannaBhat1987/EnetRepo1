@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
+import com.pras.constant.Constants;
 import com.pras.dao.BranchDao;
 import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
@@ -15,6 +18,7 @@ import com.pras.dtohelper.UserDtoHelper;
 import com.pras.model.Branch;
 import com.pras.model.User;
 import com.pras.util.HibernateUtil;
+import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 
 public class BranchDaoImpl implements BranchDao{
 
@@ -28,6 +32,7 @@ public class BranchDaoImpl implements BranchDao{
         Branch b = BranchDtoHelper.getEntityFromDto(branch);
         User u = (User) session.get(User.class, branch.getBranchmanagerId());
         b.setBranchmanager(u);
+        b.setStatus(Constants.CREATED);
         //Save the Model object
         session.save(b);
         session.getTransaction().commit();
@@ -42,7 +47,8 @@ public class BranchDaoImpl implements BranchDao{
         //start transaction
         session.beginTransaction();
         Branch branch = (Branch) session.get(Branch.class, id);
-        session.delete(branch);
+        branch.setStatus(Constants.DELETED);
+        session.saveOrUpdate(branch);
         session.getTransaction().commit();
         session.close();
 	}
@@ -63,6 +69,7 @@ public class BranchDaoImpl implements BranchDao{
         b1.setPincode(branch.getPincode());
         b1.setPlace(branch.getPlace());
         b1.setBranchmanager(u);
+        b1.setStatus(branch.getStatus());
         //Save the Model object
         session.saveOrUpdate(b1);
         session.getTransaction().commit();
@@ -74,7 +81,9 @@ public class BranchDaoImpl implements BranchDao{
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		session.beginTransaction();
-		List<Branch> branches = session.createCriteria(Branch.class).list();
+		Criteria cr = session.createCriteria(Branch.class);
+		cr.add(Restrictions.eq("status", Constants.CREATED)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY) ;
+		List<Branch> branches = cr.list();
 		List<BranchDto> dtos = new ArrayList<BranchDto>();
 		BranchDto dto = null;
 		for(int i=0;i<branches.size();i++) {

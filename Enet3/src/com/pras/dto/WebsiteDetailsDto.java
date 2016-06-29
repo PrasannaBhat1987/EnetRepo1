@@ -7,6 +7,8 @@ public class WebsiteDetailsDto {
 	private long id;
 	private String name;
 	private List<RaoDto> raos;
+	private String status;
+	
 	
 	public long getId() {
 		return id;
@@ -25,6 +27,12 @@ public class WebsiteDetailsDto {
 	}
 	public void setRaos(List<RaoDto> raos) {
 		this.raos = raos;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 

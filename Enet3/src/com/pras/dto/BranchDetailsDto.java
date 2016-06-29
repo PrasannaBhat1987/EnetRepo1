@@ -12,6 +12,8 @@ public class BranchDetailsDto {
 	private UserDto branchmanager;
 	private List<UserDto> branchEmployees;
 	private List<RaoDto> raos;
+	private String status;
+	
 	
 	public long getId() {
 		return id;
@@ -60,5 +62,11 @@ public class BranchDetailsDto {
 	}
 	public void setRaos(List<RaoDto> raos) {
 		this.raos = raos;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}	
 }

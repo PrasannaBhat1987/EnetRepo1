@@ -29,6 +29,7 @@ public class CustomerDtoHelper {
 		dto.setAddress(c.getAddress());
 		dto.setContact(c.getContact());
 		dto.setEmail(c.getEmail());
+		dto.setStatus(c.getStatus());
 		return dto;
 	}
 
@@ -39,7 +40,7 @@ public class CustomerDtoHelper {
 		dto.setAddress(c.getAddress());
 		dto.setContact(c.getContact());
 		dto.setEmail(c.getEmail());
-		
+		dto.setStatus(c.getStatus());
 		List<Rao> raos = c.getRaos();
 		List<RaoDto> raoDtos = new ArrayList<RaoDto>();
 		for(Rao r : raos) {

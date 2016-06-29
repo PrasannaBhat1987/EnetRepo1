@@ -30,6 +30,7 @@ public class BranchDtoHelper {
 		if(b.getBranchmanager() != null) {
 			dto.setBranchmanagerId(b.getBranchmanager().getId());
 		}
+		dto.setStatus(b.getStatus());
 		return dto;
 	}
 
@@ -49,7 +50,7 @@ public class BranchDtoHelper {
 			raoDtos.add(RaoDtoHelper.getDtoFromEntity(r));
 		}
 		dto.setRaos(raoDtos);
-				
+		dto.setStatus(b.getStatus());		
 		return dto;
 	}
 	

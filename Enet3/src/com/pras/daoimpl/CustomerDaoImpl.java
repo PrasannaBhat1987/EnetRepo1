@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
+import com.pras.constant.Constants;
 import com.pras.dao.CustomerDao;
 import com.pras.dto.BranchDetailsDto;
 import com.pras.dto.BranchDto;
@@ -15,6 +18,7 @@ import com.pras.dtohelper.BranchDtoHelper;
 import com.pras.dtohelper.CustomerDtoHelper;
 import com.pras.model.Branch;
 import com.pras.model.Customer;
+import com.pras.model.Website;
 import com.pras.util.HibernateUtil;
 
 public class CustomerDaoImpl implements CustomerDao {
@@ -26,8 +30,10 @@ public class CustomerDaoImpl implements CustomerDao {
         Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
+        Customer c = CustomerDtoHelper.getEntityFromDto(customer);
+        c.setStatus(Constants.CREATED);
         //Save the Model object
-        session.save(CustomerDtoHelper.getEntityFromDto(customer));
+        session.save(c);
         session.getTransaction().commit();
         session.close();
 	}
@@ -41,7 +47,9 @@ public class CustomerDaoImpl implements CustomerDao {
         session.beginTransaction();
         //Save the Model object
         Customer cust = (Customer) session.get(Customer.class, id);
-        session.delete(cust);
+        cust.setStatus(Constants.DELETED);
+        session.saveOrUpdate(cust);
+        //session.delete(cust);
         session.getTransaction().commit();
         session.close();
 	}
@@ -67,7 +75,9 @@ public class CustomerDaoImpl implements CustomerDao {
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		session.beginTransaction();
-		List<Customer> custs = session.createCriteria(Customer.class).list();
+		Criteria cr = session.createCriteria(Customer.class);
+		cr.add(Restrictions.eq("status", Constants.CREATED)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Customer> custs = cr.list();
 		List<CustomerDto> dtos = new ArrayList<CustomerDto>();
 		CustomerDto dto = null;
 		for(int i=0;i<custs.size();i++) {

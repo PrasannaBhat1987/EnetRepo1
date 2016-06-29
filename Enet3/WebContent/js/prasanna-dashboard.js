@@ -364,12 +364,17 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		jq('.repdetails').hide();
 	}
 	
-	$scope.createRao = function() {
-		if($scope.raoid && $scope.raoid >0) {
-			$scope.updateRao();
+	$scope.createRao = function(isValid) {
+		if(isValid) {
+			if($scope.raoid && $scope.raoid >0) {
+				$scope.updateRao();
+			} else {
+				$scope.createNewRao();
+			}
 		} else {
-			$scope.createNewRao();
+			alert('Some necessary fields are empty. Please check.');
 		}
+		
 	}
 	
 	$scope.createNewRao = function() {
@@ -632,8 +637,12 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
 			        else {
 			            jq('tr.selected').removeClass('selected');
 			            jq(this).addClass('selected');
-			            $scope.websitename = table.rows('.selected').data()[0].name;
-			            $scope.websiteid = table.rows('.selected').data()[0].id;
+			            var data = table.rows('.selected').data()[0];
+			            if (data) {
+			            	$scope.websitename = data.name;
+				            $scope.websiteid = data.id;
+			            }
+			            
 			        }
 			    } );
 			 
@@ -843,7 +852,7 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 
 
 sampleApp.controller('EditProfileController',function($scope, $http, $cookies, $window) {
-	$scope.message='hellooooooooo';
+	$scope.message='';
 	$scope.showpass = false;
 	$scope.newPassword = '';
 	$scope.password='';

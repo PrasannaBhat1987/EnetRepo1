@@ -7,6 +7,8 @@ public class CustomerDto {
 	private String email;
 	private String contact;
 	private String address;
+	private String status;
+	
 	public long getId() {
 		return id;
 	}
@@ -36,6 +38,12 @@ public class CustomerDto {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

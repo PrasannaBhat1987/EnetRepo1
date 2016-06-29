@@ -13,6 +13,7 @@ import com.pras.dto.UserDetailsDto;
 import com.pras.dto.UserDto;
 import com.pras.dtohelper.UserDtoHelper;
 import com.pras.model.Branch;
+import com.pras.model.Customer;
 import com.pras.model.User;
 import com.pras.util.HibernateUtil;
 
@@ -60,7 +61,7 @@ public class UserDaoImpl implements UserDao {
 			u.setManagerId(user.getManagerId());
 		}
 		
-		if(user.getNewPassword() != null) {
+		if(user.getNewPassword() != null && user.getNewPassword().length() > 0) {
 			if (user.getPassword().equals(u.getPassword())) {
 				u.setPassword(user.getNewPassword());
 			} else {
@@ -153,8 +154,11 @@ public class UserDaoImpl implements UserDao {
 		Session session = HibernateUtil.getSessionAnnotationFactory()
 				.openSession();
 		Criteria cr = session.createCriteria(User.class);
+		cr.add(Restrictions.eq("status", Constants.CREATED)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		//List<Customer> custs = cr.list();
+		//Criteria cr = session.createCriteria(User.class);
 		cr.add(Restrictions.eq("role", role));
-		List results = cr.list();
+		List<User> results = cr.list();
 		session.close();
 		return results.size();
 	}

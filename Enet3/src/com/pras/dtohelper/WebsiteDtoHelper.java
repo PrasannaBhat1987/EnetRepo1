@@ -21,6 +21,7 @@ public class WebsiteDtoHelper {
 		WebsiteDto dto = new WebsiteDto();
 		dto.setId(w.getId());
 		dto.setName(w.getName());
+		dto.setStatus(w.getStatus());
 		return dto;
 	}
 
@@ -34,6 +35,7 @@ public class WebsiteDtoHelper {
 			raoDtos.add(RaoDtoHelper.getDtoFromEntity(r));
 		}
 		dto.setRaos(raoDtos);
+		dto.setStatus(w.getStatus());
 		return dto;
 	}
 	

@@ -19,6 +19,7 @@ public class Website implements Serializable {
 	@GeneratedValue
 	private long id;
 	private String name;
+	private String status;
 	
 	@OneToMany(mappedBy="website")
 	private List<Rao> raos;
@@ -45,6 +46,14 @@ public class Website implements Serializable {
 
 	public void setRaos(List<Rao> raos) {
 		this.raos = raos;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

@@ -23,6 +23,7 @@ public class Customer implements Serializable {
 	private String email;
 	private String contact;
 	private String address;
+	private String status;
 	
 	@OneToMany(mappedBy="customer",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Rao> raos;
@@ -73,6 +74,14 @@ public class Customer implements Serializable {
 
 	public void setRaos(List<Rao> raos) {
 		this.raos = raos;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

@@ -9,6 +9,7 @@ public class BranchDto {
 	private long pincode;
 	private String contact;
 	private long branchmanagerId;
+	private String status;
 	
 	public long getId() {
 		return id;
@@ -45,6 +46,12 @@ public class BranchDto {
 	}
 	public void setBranchmanagerId(long branchmanager) {
 		this.branchmanagerId = branchmanager;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }
