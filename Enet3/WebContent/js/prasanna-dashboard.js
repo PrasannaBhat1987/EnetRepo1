@@ -261,6 +261,32 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.removeItem = function(index) {
 		 $scope.lineItems.splice(index,1); 
 	}
+	
+	$scope.representativecontact = '';
+	$scope.representativeemail = '';
+	$scope.representativename = '';
+	$scope.representative;
+	
+	$scope.fetchRepresentative = function(){
+		$http.get('http://localhost:8083/Enet3/rest/representative/' + $scope.representativeid).success( function(response) {
+		      $scope.representative = response;
+		      jq('.repdetails').show();
+		      $scope.representativecontact = response.contact;
+		      $scope.representativeemail = response.email;
+		      $scope.representativename = response.name;
+		}).error(function (errorInfo){
+			jq('#error').click();
+			$scope.errorCode = errorInfo.status;
+			$scope.errorMessage = errorInfo.message;
+		});
+	};
+	
+	$scope.initializeRep = function() {
+		if(!$scope.representativeid) {
+			$scope.representativeid = $cookies.userId;
+			$scope.fetchRepresentative();
+		}
+	}
 	if(selectedRaoId) {
 		$http.get('http://localhost:8083/Enet3/rest/rao/' + selectedRaoId).success( function(response) {
 			$scope.websiteId = response.websiteId;
@@ -284,7 +310,11 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			$scope.status = response.status;
 			selectedRaoId = null;
 		});
+	} else {
+		$scope.initializeRep();
 	}
+	
+	
 	
 	$scope.printRao = function() {
 		$window.location.href = 'http://localhost:8083/Enet3/rest/rao/' + $scope.raoid + '/print';
@@ -365,15 +395,15 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	}
 	
 	$scope.createRao = function(isValid) {
-		if(isValid) {
+		//if(isValid) {
 			if($scope.raoid && $scope.raoid >0) {
 				$scope.updateRao();
 			} else {
 				$scope.createNewRao();
 			}
-		} else {
-			alert('Some necessary fields are empty. Please check.');
-		}
+		//} else {
+		//	alert('Some necessary fields are empty. Please check.');
+		//}
 		
 	}
 	
@@ -444,24 +474,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		});
 	};
  
-	$scope.representativecontact = '';
-	$scope.representativeemail = '';
-	$scope.representativename = '';
-	$scope.representative;
 	
-	$scope.fetchRepresentative = function(){
-		$http.get('http://localhost:8083/Enet3/rest/representative/' + $scope.representativeid).success( function(response) {
-		      $scope.representative = response;
-		      jq('.repdetails').show();
-		      $scope.representativecontact = response.contact;
-		      $scope.representativeemail = response.email;
-		      $scope.representativename = response.name;
-		}).error(function (errorInfo){
-			jq('#error').click();
-			$scope.errorCode = errorInfo.status;
-			$scope.errorMessage = errorInfo.message;
-		});
-	};
 });
 
 sampleApp.controller('CreateCustomersController', function($scope, $http, $cookies, $window) {
@@ -559,8 +572,11 @@ sampleApp.controller('CreateCustomersController', function($scope, $http, $cooki
 	        .success(function (data, status, headers) {
 	        	table.row('.selected').remove().draw( false );
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function (errorInfo){
+				jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+			});
     });
 	
 	$scope.updateCustomer = function() {
@@ -655,8 +671,11 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
 	        .success(function (data, status, headers) {
 	        	table.row('.selected').remove().draw( false );
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function (errorInfo){
+				jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+			});
     });
 	
 	$scope.updateWebsite = function() {

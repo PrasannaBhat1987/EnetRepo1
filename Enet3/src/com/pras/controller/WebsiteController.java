@@ -18,6 +18,7 @@ import com.pras.dao.WebsiteDao;
 import com.pras.daoimpl.WebsiteDaoImpl;
 import com.pras.dto.WebsiteDetailsDto;
 import com.pras.dto.WebsiteDto;
+import com.pras.exception.ErrorInfo;
 import com.pras.model.Order;
 import com.pras.model.Website;
 import com.pras.util.AuthUtil;
@@ -25,6 +26,8 @@ import com.pras.util.AuthUtil;
 @Path("/website")
 public class WebsiteController {
 
+	ErrorInfo info = new ErrorInfo();
+	
 	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -32,14 +35,13 @@ public class WebsiteController {
 			WebsiteDto website) {
 
 		System.out.println("Received Website is :" + website.getName());
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			WebsiteDao dao = new WebsiteDaoImpl();
 			dao.addWebsite(website);
 			return Response.status(200)
 					.entity("This website is added successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -48,14 +50,13 @@ public class WebsiteController {
 	@Path("{id}")
 	public Response delete(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
 
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth)) {
 			WebsiteDao dao = new WebsiteDaoImpl();
 			dao.removeWebsite(id);
 			return Response.status(200)
 					.entity("This website is removed successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -64,14 +65,13 @@ public class WebsiteController {
 	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response edit(@HeaderParam("Auth") String auth, @PathParam("id") long id, WebsiteDto website) {
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			WebsiteDao dao = new WebsiteDaoImpl();
 			dao.editWebsite(id, website);
 			return Response.status(200)
 					.entity("This website is added successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 		
 	}
@@ -81,14 +81,13 @@ public class WebsiteController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll(@HeaderParam("Auth") String auth) {
 
-		if (isValid(auth)) {
+		if (AuthUtil.isValidForAll(auth)) {
 			WebsiteDao dao = new WebsiteDaoImpl();
 			List<WebsiteDto> websites = dao.getWebsites();
 			return Response.status(200)
 					.entity(websites).build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -104,8 +103,7 @@ public class WebsiteController {
 			return Response.status(200)
 					.entity(website).build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -116,6 +114,13 @@ public class WebsiteController {
 			return true;
 		}
 		return true;
+	}
+	
+	private Response getErrorInfo() {
+		info.setStatus(400);
+		info.setMessage("You are not authorized to perform this action");
+		return Response.status(500)
+				.entity(info).build();
 	}
 
 }

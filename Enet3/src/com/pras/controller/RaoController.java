@@ -65,7 +65,7 @@ public class RaoController {
 	public Response delete(@HeaderParam("Auth") String auth,
 			@PathParam("id") long id) {
 
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth)) {
 			RaoDao dao = new RaoDaoImpl();
 			dao.removeRao(id);
 			return Response.status(200)

@@ -32,6 +32,8 @@ import com.pras.util.AuthUtil;
 @Path("/customer")
 public class CustomerController {
 
+	ErrorInfo info = new ErrorInfo(); 
+	
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("/add")
@@ -43,8 +45,7 @@ public class CustomerController {
 			return Response.status(200)
 					.entity("This Customer is added successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
     }
 	
@@ -60,14 +61,13 @@ public class CustomerController {
 	@Path("{id}")
 	public Response delete(@HeaderParam("Auth") String auth, @PathParam("id") long id) {
 
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth)) {
 			CustomerDao dao = new CustomerDaoImpl();
 			dao.removeCustomer(id);
 			return Response.status(200)
 					.entity("This customer is removed successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -84,8 +84,7 @@ public class CustomerController {
 			return Response.status(200)
 					.entity("This branch is updated successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -101,8 +100,7 @@ public class CustomerController {
 			list.addAll(dao.getCustomers());
 			return Response.status(200).entity(list).build();
 		}
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 
 	}
 	
@@ -124,8 +122,7 @@ public class CustomerController {
 			return Response.status(200).entity(dto).build();
 		}
 		
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 	}
 	
 	@GET
@@ -141,8 +138,14 @@ public class CustomerController {
 			return Response.status(200).entity(dto).build();
 		}
 		
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
+	}
+	
+	private Response getErrorInfo() {
+		info.setStatus(400);
+		info.setMessage("You are not authorized to perform this action");
+		return Response.status(500)
+				.entity(info).build();
 	}
 	
 }

@@ -85,7 +85,7 @@
 							</td>
 							<td data-th="Price">{{lineItem.unitPrice | currency:'&#8377;'}}</td>
 							<td data-th="Quantity">
-								<input type="number" class="form-control text-center" value="{{lineItem.quantity}}" disabled>
+								<input type="number" class="form-control text-center" min="1" value="{{lineItem.quantity}}" disabled>
 							</td>
 							<td data-th="Subtotal" class="text-center">{{lineItem.unitPrice * lineItem.quantity | currency:'&#8377;'}}</td>
 							<td class="actions" data-th="">
@@ -103,7 +103,7 @@
 							</td>
 							<td data-th="Price"><input type="text" class="form-control" id="itemPrice" ng-model="unitPrice"></td>
 							<td data-th="Quantity">
-								<input type="number" class="form-control text-center" id="itemQty" value = '0' ng-model="quantity">
+								<input type="number" class="form-control text-center" id="itemQty" min="1" value = "0" ng-model="quantity">
 							</td>
 							<td data-th="Subtotal" class="text-center">{{unitPrice * quantity | currency:'&#8377;'}}</td>
 							<td class="actions" data-th="">
@@ -130,11 +130,11 @@
 	  	<hr>
 	  	<div class="form-group">
 			<label for="representativeid">Representative ID:</label> 
-			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid" required>
+			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid" disabled>
 		</div>
-		<div class="form-group">
+		<!-- div class="form-group">
 			<button class="btn btn-primary center-block" ng-click="fetchRepresentative()">Fetch Representative</button>
-		</div>
+		</div-->
 	  	<div class="form-group repdetails">
 			<label for="representativename">Representative Name:</label> 
 			<input	type="text" class="form-control" id="representativename" ng-model="representativename" disabled>
@@ -196,6 +196,7 @@
 				    <tr><td>Date:</td><td>{{orderDate | date:'dd-MM-yyyy'}}</td></tr>
 				    <tr><td>Website:</td><td>{{websiteName}}</td></tr>
 				    <tr><td>Order #:</td><td>{{orderNumber}}</td></tr>
+				    <tr><td>Status:</td><td>{{status}}</td></tr>
 				    <tr id="raoid"><td>RAO #:</td><td>{{raoid}}</td></tr>
 				  </table>
 				</div>
@@ -245,7 +246,7 @@
 								</td>
 								<td data-th="Price" class="hidden-xs text-right">{{lineItem.unitPrice | currency:'&#8377;'}}</td>
 								<td data-th="Quantity" class="hidden-xs">
-									<input type="number" class="form-control text-center" value="{{lineItem.quantity}}" disabled>
+									<input type="number" class="form-control text-center" min="1"  value="{{lineItem.quantity}}" disabled>
 								</td>
 								<td data-th="Subtotal" class="text-right">{{lineItem.unitPrice * lineItem.quantity | currency:'&#8377;'}}</td>
 						</tr>
