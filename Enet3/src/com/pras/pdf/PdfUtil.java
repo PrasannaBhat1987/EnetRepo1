@@ -9,6 +9,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Header;
 import com.itextpdf.text.Image;
@@ -49,9 +50,9 @@ public class PdfUtil {
 		      
 		      table = new PdfPTable(3);
 		      table.setWidthPercentage(100);
-		      table.addCell(getCell("ORDER DETAILS\n\n",PdfPCell.ALIGN_LEFT, boldFont, false, 0));
+		      table.addCell(getCell("ORDER\n\n",PdfPCell.ALIGN_LEFT, boldFont, false, 0));
 		      table.addCell(getCell("",1, null, false, 0));
-		      table.addCell(getCell("REP DETAILS\n\n",PdfPCell.ALIGN_LEFT, boldFont, false, 0));
+		      table.addCell(getCell("CUSTOMER\n\n",PdfPCell.ALIGN_LEFT, boldFont, false, 0));
 		      
 		      PdfPCell cellOne = new PdfPCell(addOrderDetails(rao));
 		      cellOne.setBorder(PdfPCell.NO_BORDER);
@@ -59,7 +60,7 @@ public class PdfUtil {
 		      
 		      table.addCell(getCell("", PdfPCell.ALIGN_CENTER, null, false, 0));
 		      
-		      cellOne = new PdfPCell(addRepDetails(rao));
+		      cellOne = new PdfPCell(addCustomerDetails(rao));
 		      cellOne.setBorder(PdfPCell.NO_BORDER);
 		      table.addCell(cellOne);
 		      
@@ -116,11 +117,11 @@ public class PdfUtil {
 		    //Customer & shipping details
 		      table = new PdfPTable(2);
 		      table.setWidthPercentage(100);
-		      table.addCell(getCell("\n\nCUSTOMER\n\n",PdfPCell.ALIGN_LEFT, boldFont, false, 0));
+		      table.addCell(getCell("\n\nREPRESENTATIVE\n\n",PdfPCell.ALIGN_LEFT, boldFont, false, 0));
 		      //table.addCell(getCell("",1, null, false, 0));
 		      table.addCell(getCell("\n\nSHIPPING\n\n",PdfPCell.ALIGN_RIGHT, boldFont, false, 0));
 		      
-		      cellOne = new PdfPCell(addCustomerDetails(rao));
+		      cellOne = new PdfPCell(addRepDetails(rao));
 		      cellOne.setBorder(PdfPCell.NO_BORDER);
 		      cellOne.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 		      table.addCell(cellOne);
@@ -131,6 +132,19 @@ public class PdfUtil {
 		      
 		      document.add(table);
 		      
+		      document.newPage();
+		      
+		      Paragraph p
+		            = new Paragraph(Constants.TERMS_AND_CONDITIONS, new Font(FontFamily.HELVETICA, 22));
+	          p.setAlignment(Element.ALIGN_CENTER);
+	          document.add(p);
+		      
+	          com.itextpdf.text.List list1 = new com.itextpdf.text.List(com.itextpdf.text.List.UNORDERED);
+	          for (int i = 0; i < Constants.CONDITIONS.length; i++) {
+	              list1.add(Constants.CONDITIONS[i]);
+	          }
+	          document.add(list1);
+	          
 		      document.close();
 		    } catch (Exception e) {
 		      e.printStackTrace();
