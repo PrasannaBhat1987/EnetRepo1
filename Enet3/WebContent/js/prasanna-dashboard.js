@@ -229,7 +229,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.showme  = false;
 	$scope.customerid='';
 	$scope.branchId='';
-	$scope.serviceCharge = 200;
+	$scope.bookingcharge = 0;
 	$scope.lineItems = [];
 	$scope.itemDescription='';
 	$scope.item='';
@@ -248,6 +248,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	$scope.total = 0;
 	$scope.disableConfirm = false;
 	$scope.status = '';
+	$scope.deliverycharge = 0.0;
 	jq('#raoid').hide();
 	
 	$http.defaults.headers.common['Auth'] = $cookies.Auth;
@@ -279,7 +280,17 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	
 	$scope.removeItem = function(index) {
 		 $scope.lineItems.splice(index,1); 
+		 $scope.bookingcharge = getBookingCharge();
 	}
+	
+	function getBookingCharge() {
+		var bc = 0;
+		$.each($scope.lineItems, function(index, item) {
+			bc = bc + item.quantity * 100;
+		});
+		return bc;
+	}
+	
 	if(selectedRaoId) {
 		$http.get('http://localhost:8083/Enet3/rest/rao/' + selectedRaoId).success( function(response) {
 			$scope.websiteId = response.websiteId;
@@ -293,6 +304,8 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			$scope.orderNumber = response.orderNumber;
 			$scope.raoid = selectedRaoId; 
 			$scope.status = response.status;
+			$scope.deliverycharge = response.deliveryCharge;
+			$scope.bookingcharge = getBookingCharge();
 			jq('#raoid').show();
 			$scope.fetchCustomer();
 			$scope.fetchRepresentative();
@@ -334,12 +347,11 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		angular.forEach($scope.lineItems, function(lineItem, index){
             total1 = total1 + lineItem.quantity * lineItem.unitPrice;
         });
-		$scope.total = total1;
 		return total1;
 	};
 	
 	$scope.getGrandTotal = function() {
-		return $scope.total + $scope.serviceCharge;
+		return $scope.total + $scope.bookingcharge + $scope.deliverycharge;
 	};
 	
 	
@@ -353,7 +365,6 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		}
 	};
 	
-	$scope.serviceCharge = 200;
 		
 	$scope.saveLineItem = function(){
 		$scope.showme  = false;
@@ -363,10 +374,14 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			"quantity" : $scope.quantity,
 			"unitPrice" : $scope.unitPrice
 		});
-		$scope.total = parseFloat($scope.total) + ($scope.quantity * parseFloat($scope.unitPrice));
+		$scope.bookingcharge = $scope.bookingcharge + $scope.quantity * 100;
+		$scope.total = $scope.getTotal() + parseFloat($scope.bookingcharge) + parseFloat($scope.deliverycharge);
+		
+		
 		$scope.itemDescription='';
 		$scope.quantity = '';
-		$scope.unitPrice= '';
+		$scope.unitPrice= ''
+		$scope.item = '';
 	};
 	
 	$scope.selectTab = function(setTab) {
@@ -421,6 +436,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
     		"lineItems" : $scope.lineItems,
 			"deliveryAddress" : $scope.shippingaddress,
 			"orderNumber" : $scope.orderNumber,
+			"deliveryCharge" : $scope.deliverycharge,
 			"total" : $scope.total
     	}).success( function(response) {
     		
@@ -445,6 +461,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
     		"lineItems" : $scope.lineItems,
 			"deliveryAddress" : $scope.shippingaddress,
 			"orderNumber" : $scope.orderNumber,
+			"deliveryCharge" : $scope.deliverycharge,
 			"total" : $scope.total
     	}).success( function(response) {
     		

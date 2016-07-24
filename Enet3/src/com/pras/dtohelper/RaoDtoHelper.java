@@ -19,6 +19,7 @@ public class RaoDtoHelper {
 		r.setOrderNumber(dto.getOrderNumber());
 		r.setStatus(dto.getStatus());
 		r.setTotal(dto.getTotal());
+		r.setDeliveryCharge(dto.getDeliveryCharge());
 		return r;
 	}
 	
@@ -48,6 +49,7 @@ public class RaoDtoHelper {
 		dto.setDeliveryAddress(r.getDeliveryAddress());
 		dto.setStatus(r.getStatus());
 		dto.setTotal(r.getTotal());
+		dto.setDeliveryCharge(r.getDeliveryCharge());
 		List<LineItem> items = r.getItems();
 		List<LineItemDto> dtos = new ArrayList<LineItemDto>();
 		for(int i=0;i<items.size();i++) {

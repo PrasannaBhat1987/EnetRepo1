@@ -52,6 +52,8 @@ public class Rao implements Serializable{
 	
 	private String status;
 	
+	private float deliveryCharge;
+	
 	private float total;
 
 	public long getId() {
@@ -148,6 +150,14 @@ public class Rao implements Serializable{
 
 	public void setTotal(float total) {
 		this.total = total;
+	}
+
+	public float getDeliveryCharge() {
+		return deliveryCharge;
+	}
+
+	public void setDeliveryCharge(float deliveryCharge) {
+		this.deliveryCharge = deliveryCharge;
 	}
 	
 }

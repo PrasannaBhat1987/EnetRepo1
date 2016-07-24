@@ -110,12 +110,25 @@
 								<button class="btn btn-danger btn-sm" ng-click="removeItem($index)"><span class="glyphicon glyphicon-remove"></button>											
 							</td>
 						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr style="background:#999966">
+							<td colspan="3">Booking Charge: </td>
+							<td class="text-center">{{bookingcharge | currency:'&#8377;'}}</td>
+							<td></td>
+						</tr>
+						<tr style="background:#999966">
+							<td colspan="3">Delivery Charge: </td>
+							<td><input type="number" class="form-control" id="deliverycharge" min="1.0" ng-model="deliverycharge" style="text-align:center;"></td>
+							<td></td>
+						</tr>
+						
 					</tbody>
 					<tfoot>
 						<tr>
 							<td><button type="button" class="btn btn-primary" ng-click="showme=true">Add LineItem</button></td>
 							<td colspan="2" class="hidden-xs"></td>
-							<td class="hidden-xs text-center"><strong>Total {{getTotal() | currency:'&#8377;'}}</strong></td>
+							<td class="hidden-xs text-center"><strong>Total {{total | currency:'&#8377;'}}</strong></td>
 							<td><button type="button" class="btn btn-primary" ng-click="saveLineItem()">Save </button></td>
 						</tr>
 					</tfoot>
@@ -257,16 +270,22 @@
 	                        <td class="text-right"><h5><strong>{{getTotal() | currency:'&#8377;'}}</strong></h5></td>
 	                    </tr>
 	                    <tr>
-	                        <td class="text-center"><h5>ENET Service charge</h5></td>
+	                        <td class="text-center"><h5>ENET Booking charge</h5></td>
 	                        <td></td>
 	                        <td></td>
-	                        <td class="text-right"><h5><strong>{{serviceCharge | currency:'&#8377;'}}</strong></h5></td>
+	                        <td class="text-right"><h5><strong>{{bookingcharge | currency:'&#8377;'}}</strong></h5></td>
+	                    </tr>
+	                    <tr>
+	                        <td class="text-center"><h5>Delivery charge</h5></td>
+	                        <td></td>
+	                        <td></td>
+	                        <td class="text-right"><h5><strong>{{deliverycharge | currency:'&#8377;'}}</strong></h5></td>
 	                    </tr>
 	                    <tr>
 	                        <td class="text-center"><h3>Total</h3></td>
 	                        <td></td>
 	                        <td></td>
-	                        <td class="text-right"><h3><strong>{{getGrandTotal() | currency:'&#8377;'}}</strong></h3></td>
+	                        <td class="text-right"><h3><strong>{{total | currency:'&#8377;'}}</strong></h3></td>
 	                    </tr>
 	                </tbody>
 	            </table>

@@ -79,26 +79,37 @@ public class PdfUtil {
 		      
 		      List<LineItem> items = rao.getItems();
 		      String itemDet = null;
+		      int totalQty = 0;
+		      float total = 0;
+		      float itemTotal = 0;
 		      for(LineItem item : items) {
 		    	  itemDet = item.getItem();
 		    	  if (item.getItemDescription() != null) {
 		    		  itemDet = itemDet + "\n" + item.getItemDescription();
 		    	  }
+		    	  itemTotal = item.getQuantity() * Float.parseFloat(item.getUnitPrice());
 		    	  table.addCell(getCell(itemDet,PdfPCell.ALIGN_CENTER, null, true, 10));
 			      table.addCell(getCell(item.getUnitPrice(),PdfPCell.ALIGN_CENTER, null, true, 10));
 			      table.addCell(getCell(item.getQuantity()+"",PdfPCell.ALIGN_CENTER, null, true, 10));
-			      table.addCell(getCell((item.getQuantity() * Float.parseFloat(item.getUnitPrice()) + ""),PdfPCell.ALIGN_CENTER, null, true, 10));
+			      table.addCell(getCell(itemTotal + "",PdfPCell.ALIGN_CENTER, null, true, 10));
+			      totalQty+=item.getQuantity();
+			      total+=itemTotal;
 		      }
 		      
-		      PdfPCell cell = getCell("ENET Service Charge",PdfPCell.ALIGN_CENTER, null, true, 10);
+		      PdfPCell cell = getCell("ENET Booking Charge",PdfPCell.ALIGN_CENTER, null, true, 10);
 		      cell.setColspan(3);
 		      table.addCell(cell);
-		      table.addCell(getCell(Constants.SERVICE_CHARGE+"",PdfPCell.ALIGN_CENTER, null, true, 10));
+		      table.addCell(getCell(Constants.BOOKING_CHARGE_PER_ITEM * totalQty +"",PdfPCell.ALIGN_CENTER, null, true, 10));
+		      
+		      cell = getCell("Delivery Charges",PdfPCell.ALIGN_CENTER, null, true, 10);
+		      cell.setColspan(3);
+		      table.addCell(cell);
+		      table.addCell(getCell(rao.getDeliveryCharge() +"",PdfPCell.ALIGN_CENTER, null, true, 10));
 		      
 		      cell = getCell("Total Amount",PdfPCell.ALIGN_CENTER, null, true, 10);
 		      cell.setColspan(3);
 		      table.addCell(cell);
-		      table.addCell(getCell(rao.getTotal()+Constants.SERVICE_CHARGE+"",PdfPCell.ALIGN_CENTER, null, true, 10));
+		      table.addCell(getCell(rao.getTotal() + "",PdfPCell.ALIGN_CENTER, null, true, 10));
 		      
 		      document.add(table);
 		      

@@ -60,6 +60,7 @@ public class RaoDaoImpl implements RaoDao{
         rao.setCustomer((Customer) session.get(Customer.class, dto.getCustomerId()));
         rao.setUser((User) session.get(User.class, dto.getUserId()));
         rao.setWebsite((Website) session.get(Website.class, dto.getWebsiteId()));
+        rao.setDeliveryCharge(dto.getDeliveryCharge());
         session.saveOrUpdate(rao);
         session.getTransaction().commit();
         session.close();
@@ -120,6 +121,7 @@ public class RaoDaoImpl implements RaoDao{
         }
         rao.setItems(it);
         rao.setStatus(dto.getStatus());
+        rao.setDeliveryCharge(dto.getDeliveryCharge());
         session.persist(rao);
         session.getTransaction().commit();
         return (int) rao.getId();

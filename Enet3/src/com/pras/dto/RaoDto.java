@@ -16,6 +16,7 @@ public class RaoDto {
 	private String deliveryAddress;
 	private Date orderDate;
 	private String status;
+	private float deliveryCharge;
 	private float total;
 	
 	public long getId() {
@@ -90,6 +91,12 @@ public class RaoDto {
 	}
 	public void setTotal(float total) {
 		this.total = total;
+	}
+	public float getDeliveryCharge() {
+		return deliveryCharge;
+	}
+	public void setDeliveryCharge(float deliveryCharge) {
+		this.deliveryCharge = deliveryCharge;
 	}
 	
 }
