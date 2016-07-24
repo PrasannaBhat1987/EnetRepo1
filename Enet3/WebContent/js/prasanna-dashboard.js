@@ -258,6 +258,25 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	      $scope.branches = response; 
 	});
 	
+	$scope.representativecontact = '';
+	$scope.representativeemail = '';
+	$scope.representativename = '';
+	$scope.representative;
+	
+	$scope.fetchRepresentative = function(){
+		$http.get('http://localhost:8083/Enet3/rest/representative/' + $scope.representativeid).success( function(response) {
+		      $scope.representative = response;
+		      jq('.repdetails').show();
+		      $scope.representativecontact = response.contact;
+		      $scope.representativeemail = response.email;
+		      $scope.representativename = response.name;
+		}).error(function (errorInfo){
+			jq('#error').click();
+			$scope.errorCode = errorInfo.status;
+			$scope.errorMessage = errorInfo.message;
+		});
+	};
+	
 	$scope.removeItem = function(index) {
 		 $scope.lineItems.splice(index,1); 
 	}
@@ -286,7 +305,16 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			selectedRaoId = null;
 		});
 	} else {
+		$scope.representativeid = $cookies.userId;
+		//$scope.fetchRepresentative();
+		
 		$scope.status = "New";
+	}
+	
+	$scope.fetchUserClick = function () {
+		if (!$scope.representativeemail && $scope.representativeid) {
+			$scope.fetchRepresentative();
+		}
 	}
 	
 	$scope.printRao = function() {
@@ -447,24 +475,6 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 		});
 	};
  
-	$scope.representativecontact = '';
-	$scope.representativeemail = '';
-	$scope.representativename = '';
-	$scope.representative;
-	
-	$scope.fetchRepresentative = function(){
-		$http.get('http://localhost:8083/Enet3/rest/representative/' + $scope.representativeid).success( function(response) {
-		      $scope.representative = response;
-		      jq('.repdetails').show();
-		      $scope.representativecontact = response.contact;
-		      $scope.representativeemail = response.email;
-		      $scope.representativename = response.name;
-		}).error(function (errorInfo){
-			jq('#error').click();
-			$scope.errorCode = errorInfo.status;
-			$scope.errorMessage = errorInfo.message;
-		});
-	};
 });
 
 sampleApp.controller('CreateCustomersController', function($scope, $http, $cookies, $window) {

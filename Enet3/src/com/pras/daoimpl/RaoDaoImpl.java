@@ -62,6 +62,7 @@ public class RaoDaoImpl implements RaoDao{
         rao.setWebsite((Website) session.get(Website.class, dto.getWebsiteId()));
         session.saveOrUpdate(rao);
         session.getTransaction().commit();
+        session.close();
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public class RaoDaoImpl implements RaoDao{
 		Session session = HibernateUtil.getSessionAnnotationFactory().openSession();
         //start transaction
         session.beginTransaction();
+        //session.clear();
         Rao dao = (Rao) session.get(Rao.class, id);
         RaoDto dto =  RaoDtoHelper.getDtoFromEntity(dao);
         session.close();

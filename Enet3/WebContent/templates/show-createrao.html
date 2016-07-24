@@ -7,7 +7,7 @@
 	    <li ng-class="{active: isSelected(1)}"><a href ng-click="selectTab(1)">Customer</a></li>
 	    <li ng-class="{active: isSelected(2)}"><a href ng-click="selectTab(2)">Branch</a></li>
 	    <li ng-class="{active: isSelected(3)}"><a href ng-click="selectTab(3)">Commondity</a></li>
-	    <li ng-class="{active: isSelected(4)}"><a href ng-click="selectTab(4)">Representative</a></li>
+	    <li ng-class="{active: isSelected(4)}"><a href ng-click="selectTab(4);fetchUserClick()">Representative</a></li>
 	    <li ng-class="{active: isSelected(5)}"><a href ng-click="selectTab(5)">Order</a></li>
 	    <li ng-class="{active: isSelected(6)}"><a href ng-click="selectTab(6);getWebsiteName()">Confirm</a></li>
 	  </ul>
@@ -130,10 +130,10 @@
 	  	<hr>
 	  	<div class="form-group">
 			<label for="representativeid">Representative ID:</label> 
-			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid" required>
+			<input	type="text" class="form-control" id="representativeid" ng-model="representativeid" disabled>
 		</div>
-		<div class="form-group">
-			<button class="btn btn-primary center-block" ng-click="fetchRepresentative()">Fetch Representative</button>
+		<div class="form-group" hidden>
+			<button id="fetchUser" class="btn btn-primary center-block" ng-click="fetchRepresentative()">Fetch Representative</button>
 		</div>
 	  	<div class="form-group repdetails">
 			<label for="representativename">Representative Name:</label> 
