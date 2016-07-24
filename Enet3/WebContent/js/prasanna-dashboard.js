@@ -285,7 +285,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 	
 	function getBookingCharge() {
 		var bc = 0;
-		$.each($scope.lineItems, function(index, item) {
+		jq.each($scope.lineItems, function(index, item) {
 			bc = bc + item.quantity * 100;
 		});
 		return bc;
@@ -306,6 +306,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			$scope.status = response.status;
 			$scope.deliverycharge = response.deliveryCharge;
 			$scope.bookingcharge = getBookingCharge();
+			$scope.total = response.total;
 			jq('#raoid').show();
 			$scope.fetchCustomer();
 			$scope.fetchRepresentative();
