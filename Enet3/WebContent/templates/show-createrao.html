@@ -103,7 +103,7 @@
 							</td>
 							<td data-th="Price"><input type="text" class="form-control" id="itemPrice" ng-model="unitPrice"></td>
 							<td data-th="Quantity">
-								<input type="number" class="form-control text-center" id="itemQty" value = '0' ng-model="quantity">
+								<input type="number" class="form-control text-center" id="itemQty" min="1" ng-model="quantity">
 							</td>
 							<td data-th="Subtotal" class="text-center">{{unitPrice * quantity | currency:'&#8377;'}}</td>
 							<td class="actions" data-th="">
@@ -196,6 +196,7 @@
 				    <tr><td>Date:</td><td>{{orderDate | date:'dd-MM-yyyy'}}</td></tr>
 				    <tr><td>Website:</td><td>{{websiteName}}</td></tr>
 				    <tr><td>Order #:</td><td>{{orderNumber}}</td></tr>
+				    <tr><td>Status:</td><td>{{status}}</td></tr>
 				    <tr id="raoid"><td>RAO #:</td><td>{{raoid}}</td></tr>
 				  </table>
 				</div>
@@ -308,35 +309,3 @@
 </div>
 
 </form>
-
-</ul>
-
-<button id="error" data-toggle="modal" data-target="#raoErrorModal" hidden>Error Details</button>
-<div class="modal fade" id="raoErrorModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Error occurred</h4>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <form role="form">
-				 	<div class="form-group">
-						<label>Error Code:</label> 
-						<label>{{errorCode}}</label> 
-					</div>
-				 	<div class="form-group">
-						<label>Error message:</label> 
-						<label>{{errorMessage}}</label> 
-					</div>
-				 </form>
-            </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
-            </div>
-        </div>
-    </div>
-</div> 

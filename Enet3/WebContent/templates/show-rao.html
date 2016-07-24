@@ -17,3 +17,33 @@
     <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="editRao()">Edit Selected</button>
     <button class="btn btn-primary col-sm-2 col-sm-offset-1" ng-click="viewRao()">View Details</button>
 </div>
+
+<button id="error" data-toggle="modal" data-target="#raoErrorModal" hidden>Error Details</button>
+<div class="modal fade" id="raoErrorModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Error occurred</h4>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form role="form">
+				 	<div class="form-group">
+						<label>Error Code:</label> 
+						<label>{{errorCode}}</label> 
+					</div>
+				 	<div class="form-group">
+						<label>Error message:</label> 
+						<label>{{errorMessage}}</label> 
+					</div>
+				 </form>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
+            </div>
+        </div>
+    </div>
+</div> 

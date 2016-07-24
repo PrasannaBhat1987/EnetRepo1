@@ -273,6 +273,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			 $scope.shippingaddress = response.deliveryAddress;
 			$scope.orderNumber = response.orderNumber;
 			$scope.raoid = selectedRaoId; 
+			$scope.status = response.status;
 			jq('#raoid').show();
 			$scope.fetchCustomer();
 			$scope.fetchRepresentative();
@@ -284,6 +285,8 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
 			$scope.status = response.status;
 			selectedRaoId = null;
 		});
+	} else {
+		$scope.status = "New";
 	}
 	
 	$scope.printRao = function() {
@@ -385,7 +388,7 @@ sampleApp.controller('CreateRaoController', function($scope, $http, $cookies, $w
     		"branchId" : $scope.branchId,
     		"userId" : $scope.representativeid,
     		"orderDate" : $scope.orderDate,
-    		"status" : "New",
+    		"status" : $scope.status,
     		"description" : $scope.description,
     		"lineItems" : $scope.lineItems,
 			"deliveryAddress" : $scope.shippingaddress,
@@ -559,8 +562,11 @@ sampleApp.controller('CreateCustomersController', function($scope, $http, $cooki
 	        .success(function (data, status, headers) {
 	        	table.row('.selected').remove().draw( false );
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function (errorInfo){
+				jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+			});
     });
 	
 	$scope.updateCustomer = function() {
@@ -607,7 +613,11 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
     	}).success( function(response) {
     		$scope.websitename = '';
     		$scope.message = 'Website added !!'; 
-    	});
+    	}).error(function (errorInfo){
+			jq('#error').click();
+			$scope.errorCode = errorInfo.status;
+			$scope.errorMessage = errorInfo.message;
+		});
 	};
 	
 	$scope.getWebsiteDetails = function() {
@@ -655,8 +665,11 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
 	        .success(function (data, status, headers) {
 	        	table.row('.selected').remove().draw( false );
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function (errorInfo){
+				jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+			});
     });
 	
 	$scope.updateWebsite = function() {
@@ -668,8 +681,11 @@ sampleApp.controller('ShowWebsitesController', function($scope, $cookies, $http,
 	        	jq('#modalClose').click();
 	        	$scope.showWebsites();
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function (errorInfo){
+				jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+			});
 	};
  
 });
@@ -781,13 +797,11 @@ sampleApp.controller('BranchController',function($scope, $http, $cookies, $windo
 		        	jq('#modalClose').click();
 		        	$scope.showBranches();
 		        })
-		        .error(function(errorInfo){
-		        	alert(errorInfo.message);
-//		        	jq('#modalClose').click();
-//		    		jq('#error').click();
-//					$scope.errorCode = errorInfo.status;
-//					$scope.errorMessage = errorInfo.message;
-		    	});
+		        .error(function (errorInfo){
+					jq('#error').click();
+					$scope.errorCode = errorInfo.status;
+					$scope.errorMessage = errorInfo.message;
+				});
 	 };
 		
 		$scope.showBranches = function() {
@@ -1024,8 +1038,11 @@ sampleApp.controller('ShowRaoController',function($scope, $window, $http, $cooki
 	        	selectedRaoId = null;
 	        	
 	        })
-	        .error(function (data, status, header, config) {
-	        });
+	        .error(function(errorInfo) {
+	    		jq('#error').click();
+				$scope.errorCode = errorInfo.status;
+				$scope.errorMessage = errorInfo.message;
+	    	});
     });
    
 });

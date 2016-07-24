@@ -78,9 +78,13 @@ public class PdfUtil {
 		      table.addCell(getCell("TOTAL",PdfPCell.ALIGN_CENTER, null, true, 10));
 		      
 		      List<LineItem> items = rao.getItems();
-		      
+		      String itemDet = null;
 		      for(LineItem item : items) {
-		    	  table.addCell(getCell(item.getItem(),PdfPCell.ALIGN_CENTER, null, true, 10));
+		    	  itemDet = item.getItem();
+		    	  if (item.getItemDescription() != null) {
+		    		  itemDet = itemDet + "\n" + item.getItemDescription();
+		    	  }
+		    	  table.addCell(getCell(itemDet,PdfPCell.ALIGN_CENTER, null, true, 10));
 			      table.addCell(getCell(item.getUnitPrice(),PdfPCell.ALIGN_CENTER, null, true, 10));
 			      table.addCell(getCell(item.getQuantity()+"",PdfPCell.ALIGN_CENTER, null, true, 10));
 			      table.addCell(getCell((item.getQuantity() * Float.parseFloat(item.getUnitPrice()) + ""),PdfPCell.ALIGN_CENTER, null, true, 10));
@@ -250,6 +254,9 @@ public class PdfUtil {
 		  
 		  table.addCell(getCell("RAO #:\n",PdfPCell.ALIGN_LEFT, null, false, 0));
 		  table.addCell(getCell(rao.getId() + "\n",PdfPCell.ALIGN_LEFT, null, false, 0));
+		  
+		  table.addCell(getCell("Status:\n",PdfPCell.ALIGN_LEFT, null, false, 0));
+		  table.addCell(getCell(rao.getStatus() + "\n",PdfPCell.ALIGN_LEFT, null, false, 0));
 		  
 		  return table;
 	  }

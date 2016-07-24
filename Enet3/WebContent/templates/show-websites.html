@@ -107,3 +107,35 @@
         </div>
     </div>
 </div>
+
+
+
+<button id="error" data-toggle="modal" data-target="#websiteErrorModal" hidden>Error Details</button>
+<div class="modal fade" id="websiteErrorModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Error occurred</h4>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form role="form">
+				 	<div class="form-group">
+						<label>Error Code:</label> 
+						<label>{{errorCode}}</label> 
+					</div>
+				 	<div class="form-group">
+						<label>Error message:</label> 
+						<label>{{errorMessage}}</label> 
+					</div>
+				 </form>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

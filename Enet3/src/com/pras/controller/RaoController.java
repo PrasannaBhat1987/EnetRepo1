@@ -27,6 +27,7 @@ import com.pras.daoimpl.RaoDaoImpl;
 import com.pras.daoimpl.UserDaoImpl;
 import com.pras.dto.BranchDto;
 import com.pras.dto.RaoDto;
+import com.pras.exception.ErrorInfo;
 import com.pras.model.Rao;
 import com.pras.pdf.PdfUtil;
 import com.pras.util.AuthUtil;
@@ -35,6 +36,8 @@ import com.pras.util.AuthUtil;
 public class RaoController {
 
 	private static final String FILE_PATH = "D:/temp/";
+	
+	ErrorInfo info = new ErrorInfo();
 	
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -47,8 +50,7 @@ public class RaoController {
 			return Response.status(200)
 					.entity(id).build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
     }
 	
@@ -65,14 +67,13 @@ public class RaoController {
 	public Response delete(@HeaderParam("Auth") String auth,
 			@PathParam("id") long id) {
 
-		if (isValid(auth)) {
+		if (AuthUtil.isValid(auth)) {
 			RaoDao dao = new RaoDaoImpl();
 			dao.removeRao(id);
 			return Response.status(200)
 					.entity("This rao is removed successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -89,8 +90,7 @@ public class RaoController {
 			return Response.status(200)
 					.entity("This rao is removed successfully").build();
 		} else {
-			return Response.status(400).entity("You are not authorized")
-					.build();
+			return getErrorInfo();
 		}
 
 	}
@@ -107,8 +107,7 @@ public class RaoController {
 			ct.setInProgress(dao.getRaoType("In Progress"));
 			return Response.status(200).entity(ct).build();
 		}
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 	}
 	
 	@GET
@@ -122,8 +121,7 @@ public class RaoController {
 			list.addAll(dao.getAllRaos());
 			return Response.status(200).entity(list).build();
 		}
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 
 	}
 	
@@ -139,8 +137,7 @@ public class RaoController {
 			return Response.status(200).entity(dto).build();
 		}
 		
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
 	}
 	
 	@GET
@@ -162,7 +159,13 @@ public class RaoController {
 			return response.build();
 		}
 		
-		return Response.status(400).entity("You are not authorized")
-				.build();
+		return getErrorInfo();
+	}
+	
+	private Response getErrorInfo() {
+		info.setStatus(400);
+		info.setMessage("You are not authorized to perform this action");
+		return Response.status(500)
+				.entity(info).build();
 	}
 }
